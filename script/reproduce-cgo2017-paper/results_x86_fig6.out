@@ -1,0 +1,529 @@
+
+---------------------------------
+
+cg
+
+***************
+no prefetching
+./run_tests_fig6_x86.sh: line 11: ./cg-no: No such file or directory
+./run_tests_fig6_x86.sh: line 11: ./cg-no: No such file or directory
+./run_tests_fig6_x86.sh: line 11: ./cg-no: No such file or directory
+
+***************
+offset  2
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-2: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-2: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-2: No such file or directory
+
+***************
+offset  4
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-4: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-4: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-4: No such file or directory
+
+***************
+offset  8
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-8: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-8: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-8: No such file or directory
+
+***************
+offset  16
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-16: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-16: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-16: No such file or directory
+
+***************
+offset  32
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-32: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-32: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-32: No such file or directory
+
+***************
+offset  64
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-64: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-64: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-64: No such file or directory
+
+***************
+offset  128
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-128: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-128: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-128: No such file or directory
+
+***************
+offset  256
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-256: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-256: No such file or directory
+./run_tests_fig6_x86.sh: line 18: ./cg-offset-256: No such file or directory
+
+---------------------------------
+
+is
+
+***************
+no prefetching
+./run_tests_fig6_x86.sh: line 28: ./is-no: No such file or directory
+./run_tests_fig6_x86.sh: line 28: ./is-no: No such file or directory
+./run_tests_fig6_x86.sh: line 28: ./is-no: No such file or directory
+
+***************
+offset  2
+./run_tests_fig6_x86.sh: line 35: ./is-offset-2: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-2: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-2: No such file or directory
+
+***************
+offset  4
+./run_tests_fig6_x86.sh: line 35: ./is-offset-4: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-4: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-4: No such file or directory
+
+***************
+offset  8
+./run_tests_fig6_x86.sh: line 35: ./is-offset-8: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-8: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-8: No such file or directory
+
+***************
+offset  16
+./run_tests_fig6_x86.sh: line 35: ./is-offset-16: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-16: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-16: No such file or directory
+
+***************
+offset  32
+./run_tests_fig6_x86.sh: line 35: ./is-offset-32: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-32: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-32: No such file or directory
+
+***************
+offset  64
+./run_tests_fig6_x86.sh: line 35: ./is-offset-64: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-64: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-64: No such file or directory
+
+***************
+offset  128
+./run_tests_fig6_x86.sh: line 35: ./is-offset-128: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-128: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-128: No such file or directory
+
+***************
+offset  256
+./run_tests_fig6_x86.sh: line 35: ./is-offset-256: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-256: No such file or directory
+./run_tests_fig6_x86.sh: line 35: ./is-offset-256: No such file or directory
+
+---------------------------------
+
+rand
+
+***************
+no prefetching
+
+real	0m0.388s
+user	0m0.368s
+sys	0m0.020s
+
+real	0m0.389s
+user	0m0.361s
+sys	0m0.028s
+
+real	0m0.386s
+user	0m0.366s
+sys	0m0.020s
+
+***************
+offset  2
+
+real	0m0.474s
+user	0m0.454s
+sys	0m0.020s
+
+real	0m0.476s
+user	0m0.456s
+sys	0m0.020s
+
+real	0m0.476s
+user	0m0.464s
+sys	0m0.012s
+
+***************
+offset  4
+
+real	0m0.445s
+user	0m0.417s
+sys	0m0.028s
+
+real	0m0.444s
+user	0m0.424s
+sys	0m0.020s
+
+real	0m0.432s
+user	0m0.416s
+sys	0m0.016s
+
+***************
+offset  8
+
+real	0m0.398s
+user	0m0.374s
+sys	0m0.024s
+
+real	0m0.389s
+user	0m0.377s
+sys	0m0.012s
+
+real	0m0.400s
+user	0m0.380s
+sys	0m0.020s
+
+***************
+offset  16
+
+real	0m0.336s
+user	0m0.308s
+sys	0m0.028s
+
+real	0m0.341s
+user	0m0.313s
+sys	0m0.028s
+
+real	0m0.341s
+user	0m0.318s
+sys	0m0.024s
+
+***************
+offset  32
+
+real	0m0.310s
+user	0m0.286s
+sys	0m0.024s
+
+real	0m0.306s
+user	0m0.282s
+sys	0m0.024s
+
+real	0m0.311s
+user	0m0.286s
+sys	0m0.024s
+
+***************
+offset  64
+
+real	0m0.272s
+user	0m0.247s
+sys	0m0.025s
+
+real	0m0.270s
+user	0m0.250s
+sys	0m0.020s
+
+real	0m0.272s
+user	0m0.251s
+sys	0m0.020s
+
+***************
+offset  128
+
+real	0m0.266s
+user	0m0.246s
+sys	0m0.020s
+
+real	0m0.265s
+user	0m0.249s
+sys	0m0.016s
+
+real	0m0.264s
+user	0m0.236s
+sys	0m0.028s
+
+***************
+offset  256
+
+real	0m0.268s
+user	0m0.248s
+sys	0m0.020s
+
+real	0m0.268s
+user	0m0.240s
+sys	0m0.028s
+
+real	0m0.267s
+user	0m0.247s
+sys	0m0.020s
+
+---------------------------------
+
+hj2
+
+***************
+no prefetching
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5456439972 	 4166299404 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.340205
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1438940.0000 	 12800000 	 426.2844 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5451218650 	 4168645238 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.338213
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1437563.0000 	 12800000 	 425.8765 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5444949096 	 4163552744 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.337906
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1435910.0000 	 12800000 	 425.3866 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  2
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5394565318 	 4159897924 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.325572
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1422623.0000 	 12800000 	 421.4504 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5392758032 	 4157860438 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.325631
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1422146.0000 	 12800000 	 421.3092 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5389253952 	 4154325548 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.325642
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1421222.0000 	 12800000 	 421.0355 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  4
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5230944580 	 4156150874 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.283412
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1379473.0000 	 12800000 	 408.6675 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5215432898 	 4149893436 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.280973
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1375383.0000 	 12800000 	 407.4557 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5227555400 	 4157367940 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.282198
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1378580.0000 	 12800000 	 408.4028 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  8
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4998107762 	 4150904590 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.223404
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1318071.0000 	 12800000 	 390.4772 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4999881300 	 4141454292 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.226355
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1318539.0000 	 12800000 	 390.6157 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4997909098 	 4146031936 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.224624
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1318019.0000 	 12800000 	 390.4616 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  16
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4763967094 	 4145938088 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.162966
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1256325.0000 	 12800000 	 372.1849 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4761794108 	 4150328444 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.161229
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1255752.0000 	 12800000 	 372.0152 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4759902204 	 4144657442 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.162234
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1255253.0000 	 12800000 	 371.8674 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  32
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4643254274 	 4142006038 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.132171
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1224492.0000 	 12800000 	 362.7542 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4953161704 	 4440216734 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.135245
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1306218.0000 	 12800000 	 386.9658 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4654944132 	 4155274460 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.131751
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1227575.0000 	 12800000 	 363.6675 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  64
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4622585266 	 4145080470 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.125914
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1219040.0000 	 12800000 	 361.1395 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4655534068 	 4174259680 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.126903
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1227730.0000 	 12800000 	 363.7136 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4636369580 	 4155545768 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.126778
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1222676.0000 	 12800000 	 362.2164 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  128
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4663599992 	 4169726608 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.130224
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1229857.0000 	 12800000 	 364.3437 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4652988728 	 4167262398 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.128066
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1227058.0000 	 12800000 	 363.5147 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4634397920 	 4144188580 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.129241
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1222156.0000 	 12800000 	 362.0623 
+[INFO ] Results = 12800000. DONE.
+
+***************
+offset  256
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4665087046 	 4152329702 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.135190
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1230249.0000 	 12800000 	 364.4599 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4658732832 	 4144753434 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.135533
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1228573.0000 	 12800000 	 363.9635 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 4652733542 	 4143726572 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.134218
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1226991.0000 	 12800000 	 363.4948 
+[INFO ] Results = 12800000. DONE.

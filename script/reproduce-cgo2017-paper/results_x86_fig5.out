@@ -1,0 +1,880 @@
+
+---------------------------------
+
+cg
+
+***************
+no prefetching
+./run_tests_fig5_x86.sh: line 11: ./cg-no: No such file or directory
+./run_tests_fig5_x86.sh: line 11: ./cg-no: No such file or directory
+./run_tests_fig5_x86.sh: line 11: ./cg-no: No such file or directory
+
+***************
+auto prefetching
+./run_tests_fig5_x86.sh: line 15: ./cg-auto: No such file or directory
+./run_tests_fig5_x86.sh: line 15: ./cg-auto: No such file or directory
+./run_tests_fig5_x86.sh: line 15: ./cg-auto: No such file or directory
+
+***************
+auto prefetching (indirect only)
+./run_tests_fig5_x86.sh: line 19: ./cg-auto-nostride: No such file or directory
+./run_tests_fig5_x86.sh: line 19: ./cg-auto-nostride: No such file or directory
+./run_tests_fig5_x86.sh: line 19: ./cg-auto-nostride: No such file or directory
+
+---------------------------------
+
+is
+
+***************
+no prefetching
+./run_tests_fig5_x86.sh: line 28: ./is-no: No such file or directory
+./run_tests_fig5_x86.sh: line 28: ./is-no: No such file or directory
+./run_tests_fig5_x86.sh: line 28: ./is-no: No such file or directory
+
+***************
+auto prefetching
+./run_tests_fig5_x86.sh: line 32: ./is-auto: No such file or directory
+./run_tests_fig5_x86.sh: line 32: ./is-auto: No such file or directory
+./run_tests_fig5_x86.sh: line 32: ./is-auto: No such file or directory
+
+***************
+auto prefetching (indirect only)
+./run_tests_fig5_x86.sh: line 36: ./is-auto-nostride: No such file or directory
+./run_tests_fig5_x86.sh: line 36: ./is-auto-nostride: No such file or directory
+./run_tests_fig5_x86.sh: line 36: ./is-auto-nostride: No such file or directory
+
+---------------------------------
+
+randacc
+
+***************
+no prefetching
+
+real	0m0.389s
+user	0m0.365s
+sys	0m0.024s
+
+real	0m0.388s
+user	0m0.364s
+sys	0m0.024s
+
+real	0m0.388s
+user	0m0.368s
+sys	0m0.020s
+
+***************
+auto prefetching
+
+real	0m0.318s
+user	0m0.302s
+sys	0m0.016s
+
+real	0m0.317s
+user	0m0.292s
+sys	0m0.024s
+
+real	0m0.316s
+user	0m0.292s
+sys	0m0.024s
+
+***************
+auto prefetching (indirect only)
+
+real	0m0.314s
+user	0m0.290s
+sys	0m0.024s
+
+real	0m0.312s
+user	0m0.292s
+sys	0m0.020s
+
+real	0m0.312s
+user	0m0.284s
+sys	0m0.028s
+
+---------------------------------
+
+hj2
+
+***************
+no prefetching
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5459823204 	 4170168774 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.340061
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1439832.0000 	 12800000 	 426.5487 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5419168314 	 4143321852 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.336435
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1429111.0000 	 12800000 	 423.3725 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5464026356 	 4178955852 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.338865
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1440941.0000 	 12800000 	 426.8771 
+[INFO ] Results = 12800000. DONE.
+
+***************
+auto prefetching
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5427332572 	 4162076830 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.333648
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1431263.0000 	 12800000 	 424.0104 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5468344682 	 4188812834 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.337405
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1442079.0000 	 12800000 	 427.2144 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5434879078 	 4170504314 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.333395
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1433254.0000 	 12800000 	 424.5999 
+[INFO ] Results = 12800000. DONE.
+
+***************
+auto prefetching (indirect only)
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5463619478 	 4185562182 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.336979
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1440833.0000 	 12800000 	 426.8453 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5410566342 	 4149775426 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.332470
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1426843.0000 	 12800000 	 422.7005 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 5450509828 	 4174790242 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 0.336395
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+1437376.0000 	 12800000 	 425.8211 
+[INFO ] Results = 12800000. DONE.
+
+---------------------------------
+
+hj8
+./run_tests_fig5_x86.sh: line 75: cd: ../../../hashjoin-ph-8/src/bin/x86: No such file or directory
+
+***************
+no prefetching
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11298581674 	 6424960028 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.285209
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2979594.0000 	 12800000 	 882.7017 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11305901208 	 6428974062 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.286036
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2981524.0000 	 12800000 	 883.2735 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11301003134 	 6429436094 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.284671
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2980233.0000 	 12800000 	 882.8909 
+[INFO ] Results = 12800000. DONE.
+
+***************
+auto prefetching
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11235790632 	 6412845272 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.271840
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2963036.0000 	 12800000 	 877.7961 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11231290794 	 6409518362 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.271515
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2961849.0000 	 12800000 	 877.4446 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11216457028 	 6406401148 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.268433
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2957937.0000 	 12800000 	 876.2857 
+[INFO ] Results = 12800000. DONE.
+auto prefetching (indirect only)
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11265038340 	 6443772734 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.271389
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2970748.0000 	 12800000 	 880.0811 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11217440304 	 6417103706 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.265880
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+2958196.0000 	 12800000 	 876.3625 
+[INFO ] Results = 12800000. DONE.
+[INFO ] Creating relation R with size = 97.656 MiB, #tuples = 12800000 : OK 
+[INFO ] Creating relation S with size = 97.656 MiB, #tuples = 12800000 : 11503948510 	 6646347636 	 0 OK 
+[INFO ] Running join algorithm NPO_st ...
+time : 1.280987
+RUNTIME TOTAL, BUILD, PART (cycles): 
+
+TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE: 
+3033753.0000 	 12800000 	 898.7460 
+[INFO ] Results = 12800000. DONE.
+
+---------------------------------
+
+g500-s16
+
+***************
+no prefetching
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.72313618000000002e-01
+construction_time: 6.63959890000000025e-02
+nbfs: 64
+min_time: 2.34194799999999995e-03
+firstquartile_time: 2.55832075000000025e-03
+median_time: 2.60116450000000016e-03
+thirdquartile_time: 2.66019824999999977e-03
+max_time: 3.14981900000000032e-03
+mean_time: 2.61992132812500014e-03
+stddev_time: 1.17873714224777873e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.08057351866885036e+08
+firstquartile_TEPS: 2.48109865947667032e+08
+median_TEPS: 2.52106548664935648e+08
+thirdquartile_TEPS: 2.56849552572569311e+08
+max_TEPS: 2.79828160147022903e+08
+harmonic_mean_TEPS: 2.50138427045444727e+08
+harmonic_stddev_TEPS: 1.41787798006328475e+06
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.71997421000000011e-01
+construction_time: 6.64078079999999987e-02
+nbfs: 64
+min_time: 2.33997500000000021e-03
+firstquartile_time: 2.52008800000000019e-03
+median_time: 2.57430149999999993e-03
+thirdquartile_time: 2.63284600000000032e-03
+max_time: 3.25252400000000013e-03
+mean_time: 2.59616210937500033e-03
+stddev_time: 1.48086884912161740e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.01487521690846860e+08
+firstquartile_TEPS: 2.49462561713023186e+08
+median_TEPS: 2.55400103324278891e+08
+thirdquartile_TEPS: 2.60444558273351341e+08
+max_TEPS: 2.80064103248966336e+08
+harmonic_mean_TEPS: 2.52427611370449901e+08
+harmonic_stddev_TEPS: 1.81405885637835832e+06
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.70752205000000018e-01
+construction_time: 6.65528590000000059e-02
+nbfs: 64
+min_time: 2.36376700000000012e-03
+firstquartile_time: 2.48489050000000019e-03
+median_time: 2.53910900000000033e-03
+thirdquartile_time: 2.59994475000000034e-03
+max_time: 3.27306500000000035e-03
+mean_time: 2.57624553125000016e-03
+stddev_time: 1.66616277374659582e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.00223032539836496e+08
+firstquartile_TEPS: 2.53249721967051625e+08
+median_TEPS: 2.58811119115506917e+08
+thirdquartile_TEPS: 2.64467246050873101e+08
+max_TEPS: 2.77245176872339785e+08
+harmonic_mean_TEPS: 2.54379092384888530e+08
+harmonic_stddev_TEPS: 2.07272322757653659e+06
+
+***************
+auto prefetching
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.70862613000000024e-01
+construction_time: 6.64963050000000055e-02
+nbfs: 64
+min_time: 2.32911800000000025e-03
+firstquartile_time: 2.51647299999999997e-03
+median_time: 2.54900500000000002e-03
+thirdquartile_time: 2.62145275000000028e-03
+max_time: 3.15693300000000022e-03
+mean_time: 2.57135923437499993e-03
+stddev_time: 1.31851625659328486e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.07588504412352115e+08
+firstquartile_TEPS: 2.53194061751733541e+08
+median_TEPS: 2.57391067968273222e+08
+thirdquartile_TEPS: 2.61491846912627429e+08
+max_TEPS: 2.81369599994504333e+08
+harmonic_mean_TEPS: 2.54862483327534348e+08
+harmonic_stddev_TEPS: 1.64648724277150910e+06
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.70844473000000024e-01
+construction_time: 6.80441499999999699e-02
+nbfs: 64
+min_time: 2.41048499999999997e-03
+firstquartile_time: 2.49568900000000015e-03
+median_time: 2.53703800000000014e-03
+thirdquartile_time: 2.58988199999999995e-03
+max_time: 3.37976000000000032e-03
+mean_time: 2.56726770312500031e-03
+stddev_time: 1.47636190617844677e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 1.93902229744123816e+08
+firstquartile_TEPS: 2.53366948825358421e+08
+median_TEPS: 2.58458269256181598e+08
+thirdquartile_TEPS: 2.62748910681592882e+08
+max_TEPS: 2.71871843218273520e+08
+harmonic_mean_TEPS: 2.55268665282660395e+08
+harmonic_stddev_TEPS: 1.84947687875084835e+06
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.70455902000000020e-01
+construction_time: 6.65699900000000094e-02
+nbfs: 64
+min_time: 2.35595500000000029e-03
+firstquartile_time: 2.55048649999999998e-03
+median_time: 2.60141800000000031e-03
+thirdquartile_time: 2.71530099999999983e-03
+max_time: 3.16268800000000030e-03
+mean_time: 2.63191439062499932e-03
+stddev_time: 1.53612014976675057e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.07210765020134747e+08
+firstquartile_TEPS: 2.45666364165792406e+08
+median_TEPS: 2.52395691853931606e+08
+thirdquartile_TEPS: 2.58123886247070789e+08
+max_TEPS: 2.78164481070309043e+08
+harmonic_mean_TEPS: 2.48998600537449867e+08
+harmonic_stddev_TEPS: 1.83096506820406113e+06
+
+***************
+auto prefetching (indirect only)
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.70935153000000006e-01
+construction_time: 6.65403870000000064e-02
+nbfs: 64
+min_time: 2.30835200000000006e-03
+firstquartile_time: 2.50518275000000037e-03
+median_time: 2.53597549999999995e-03
+thirdquartile_time: 2.58275975000000048e-03
+max_time: 3.08194100000000037e-03
+mean_time: 2.56165654687499997e-03
+stddev_time: 1.31130646717210871e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.12639696866357893e+08
+firstquartile_TEPS: 2.54166489425427079e+08
+median_TEPS: 2.58816109250102252e+08
+thirdquartile_TEPS: 2.62106144067935705e+08
+max_TEPS: 2.83900808888765633e+08
+harmonic_mean_TEPS: 2.55827816105739027e+08
+harmonic_stddev_TEPS: 1.64991203478351259e+06
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.72203664999999950e-01
+construction_time: 6.63852760000000069e-02
+nbfs: 64
+min_time: 2.33473800000000026e-03
+firstquartile_time: 2.49623550000000003e-03
+median_time: 2.54678399999999985e-03
+thirdquartile_time: 2.60622149999999988e-03
+max_time: 3.15646600000000013e-03
+mean_time: 2.56105089062500001e-03
+stddev_time: 1.21774205287884270e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.07619217187829673e+08
+firstquartile_TEPS: 2.52142839037262797e+08
+median_TEPS: 2.57650080689865530e+08
+thirdquartile_TEPS: 2.63265247989991128e+08
+max_TEPS: 2.80692308944301188e+08
+harmonic_mean_TEPS: 2.55888316159180164e+08
+harmonic_stddev_TEPS: 1.53291218830647063e+06
+SCALE: 16
+nvtx: 65536
+edgefactor: 10
+terasize: 1.04857599999999994e-05
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 1.71293330000000021e-01
+construction_time: 6.76310920000000038e-02
+nbfs: 64
+min_time: 2.36039300000000013e-03
+firstquartile_time: 2.50547275000000038e-03
+median_time: 2.58602750000000003e-03
+thirdquartile_time: 2.65865250000000023e-03
+max_time: 3.16288000000000029e-03
+mean_time: 2.60049685937500030e-03
+stddev_time: 1.45253778737926764e-04
+min_nedge: 6.55343000000000000e+05
+firstquartile_nedge: 6.55343000000000000e+05
+median_nedge: 6.55343000000000000e+05
+thirdquartile_nedge: 6.55343000000000000e+05
+max_nedge: 6.55343000000000000e+05
+mean_nedge: 6.55343000000000000e+05
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 2.07198186462970436e+08
+firstquartile_TEPS: 2.47337843746161759e+08
+median_TEPS: 2.54879361801875472e+08
+thirdquartile_TEPS: 2.62100921230903983e+08
+max_TEPS: 2.77641477499721408e+08
+harmonic_mean_TEPS: 2.52006841553157747e+08
+harmonic_stddev_TEPS: 1.77342637117351894e+06
+
+---------------------------------
+
+***************
+no prefetching
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.71357177299999996e+00
+construction_time: 4.54425273399999963e+00
+nbfs: 64
+min_time: 2.33735895000000027e-01
+firstquartile_time: 2.38496785000000044e-01
+median_time: 2.39858212499999973e-01
+thirdquartile_time: 2.41438696500000022e-01
+max_time: 2.43689791000000017e-01
+mean_time: 2.39550098078124996e-01
+stddev_time: 2.21382326247297452e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.60555295071839839e+07
+firstquartile_TEPS: 8.70033440138380975e+07
+median_TEPS: 8.74598915592730343e+07
+thirdquartile_TEPS: 8.79788208654281199e+07
+max_TEPS: 8.97202973467126191e+07
+harmonic_mean_TEPS: 8.75426650552266836e+07
+harmonic_stddev_TEPS: 1.01928605490811417e+05
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.71600490600000022e+00
+construction_time: 4.54264964800000026e+00
+nbfs: 64
+min_time: 2.33545997000000005e-01
+firstquartile_time: 2.37322677750000016e-01
+median_time: 2.39236770500000029e-01
+thirdquartile_time: 2.40493992750000024e-01
+max_time: 2.45415469000000025e-01
+mean_time: 2.38925674453125014e-01
+stddev_time: 2.23861339059215105e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.54504163305207044e+07
+firstquartile_TEPS: 8.72160683591228724e+07
+median_TEPS: 8.77916573955869675e+07
+thirdquartile_TEPS: 8.83886714732233882e+07
+max_TEPS: 8.97932495927129984e+07
+harmonic_mean_TEPS: 8.77714546500706375e+07
+harmonic_stddev_TEPS: 1.03609433207570852e+05
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.76623527599999974e+00
+construction_time: 4.54512116200000005e+00
+nbfs: 64
+min_time: 2.32579130000000023e-01
+firstquartile_time: 2.37293148749999988e-01
+median_time: 2.38740512000000016e-01
+thirdquartile_time: 2.40452125750000023e-01
+max_time: 2.47721426000000022e-01
+mean_time: 2.38885778093750001e-01
+stddev_time: 2.81644040898679400e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.46549866058012992e+07
+firstquartile_TEPS: 8.72582500389805883e+07
+median_TEPS: 8.79307568356055617e+07
+thirdquartile_TEPS: 8.84963403106950969e+07
+max_TEPS: 9.01665338588204235e+07
+harmonic_mean_TEPS: 8.77861133774571270e+07
+harmonic_stddev_TEPS: 1.30396465161394473e+05
+
+***************
+auto prefetching
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.73887025099999981e+00
+construction_time: 4.61110469800000011e+00
+nbfs: 64
+min_time: 2.36585500000000004e-01
+firstquartile_time: 2.38974796999999961e-01
+median_time: 2.40267471499999996e-01
+thirdquartile_time: 2.41992178000000030e-01
+max_time: 2.45650885999999957e-01
+mean_time: 2.40363169421874995e-01
+stddev_time: 2.07100414248736781e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.53685258029152900e+07
+firstquartile_TEPS: 8.68179074058998376e+07
+median_TEPS: 8.74236815882817209e+07
+thirdquartile_TEPS: 8.78314677714932710e+07
+max_TEPS: 8.86396419053576738e+07
+harmonic_mean_TEPS: 8.72465363576266915e+07
+harmonic_stddev_TEPS: 9.47089377441643155e+04
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.72448119299999991e+00
+construction_time: 4.54622733899999965e+00
+nbfs: 64
+min_time: 2.35811660000000006e-01
+firstquartile_time: 2.38690057000000011e-01
+median_time: 2.39641682999999994e-01
+thirdquartile_time: 2.40972518750000003e-01
+max_time: 2.42990344000000025e-01
+mean_time: 2.39559662484374991e-01
+stddev_time: 1.80218272461408970e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.63032400991209596e+07
+firstquartile_TEPS: 8.71166604489348829e+07
+median_TEPS: 8.76014024404799938e+07
+thirdquartile_TEPS: 8.79826465232431442e+07
+max_TEPS: 8.89305219258453995e+07
+harmonic_mean_TEPS: 8.75391699191753566e+07
+harmonic_stddev_TEPS: 8.29692719480549713e+04
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.72038867699999987e+00
+construction_time: 4.54306833099999974e+00
+nbfs: 64
+min_time: 2.33456749000000019e-01
+firstquartile_time: 2.38322918250000015e-01
+median_time: 2.39809779000000001e-01
+thirdquartile_time: 2.41031246749999956e-01
+max_time: 2.44555740000000021e-01
+mean_time: 2.39665550406250011e-01
+stddev_time: 2.07194940144763817e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.57508149266911447e+07
+firstquartile_TEPS: 8.70716289332347661e+07
+median_TEPS: 8.74616908673819602e+07
+thirdquartile_TEPS: 8.80338718224489689e+07
+max_TEPS: 8.98275765846460909e+07
+harmonic_mean_TEPS: 8.75004937691417187e+07
+harmonic_stddev_TEPS: 9.53045777510842017e+04
+
+***************
+auto prefetching (indirect only)
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.73896994099999969e+00
+construction_time: 4.53412141100000010e+00
+nbfs: 64
+min_time: 2.32492584000000002e-01
+firstquartile_time: 2.37362091750000032e-01
+median_time: 2.38692724499999953e-01
+thirdquartile_time: 2.40267954750000012e-01
+max_time: 2.46848745000000008e-01
+mean_time: 2.38540484937499991e-01
+stddev_time: 2.52956877766886794e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.49542662248495519e+07
+firstquartile_TEPS: 8.73572957831512094e+07
+median_TEPS: 8.79037552123658061e+07
+thirdquartile_TEPS: 8.85567524764467180e+07
+max_TEPS: 9.02000985975535512e+07
+harmonic_mean_TEPS: 8.79131859126327038e+07
+harmonic_stddev_TEPS: 1.17454088390492849e+05
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.73374873900000015e+00
+construction_time: 4.54412057000000047e+00
+nbfs: 64
+min_time: 2.32500057999999954e-01
+firstquartile_time: 2.36166540499999966e-01
+median_time: 2.38452859000000017e-01
+thirdquartile_time: 2.39960532000000004e-01
+max_time: 2.69231423999999997e-01
+mean_time: 2.38539221171875010e-01
+stddev_time: 4.64159139344333133e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 7.78915539963121116e+07
+firstquartile_TEPS: 8.74553155838328898e+07
+median_TEPS: 8.80201981215674877e+07
+thirdquartile_TEPS: 8.88379297154954225e+07
+max_TEPS: 9.01971990045697242e+07
+harmonic_mean_TEPS: 8.79136516711012572e+07
+harmonic_stddev_TEPS: 2.15522767050009483e+05
+SCALE: 21
+nvtx: 2097152
+edgefactor: 10
+terasize: 3.35544319999999980e-04
+A: 5.69999999999999951e-01
+B: 1.90000000000000002e-01
+C: 1.90000000000000002e-01
+D: 5.00000000000000444e-02
+generation_time: 6.72193402999999989e+00
+construction_time: 4.60107881099999982e+00
+nbfs: 64
+min_time: 2.36212317999999977e-01
+firstquartile_time: 2.38885867250000022e-01
+median_time: 2.39995260499999974e-01
+thirdquartile_time: 2.42079019499999992e-01
+max_time: 2.45114379000000021e-01
+mean_time: 2.40225408718750005e-01
+stddev_time: 2.09010873321935093e-03
+min_nedge: 2.09708540000000000e+07
+firstquartile_nedge: 2.09708540000000000e+07
+median_nedge: 2.09708540000000000e+07
+thirdquartile_nedge: 2.09708540000000000e+07
+max_nedge: 2.09708540000000000e+07
+mean_nedge: 2.09708540000000000e+07
+stddev_nedge: 0.00000000000000000e+00
+min_TEPS: 8.55553806576153487e+07
+firstquartile_TEPS: 8.66805465025964230e+07
+median_TEPS: 8.74111292993997335e+07
+thirdquartile_TEPS: 8.79137104088092297e+07
+max_TEPS: 8.87796799826501906e+07
+harmonic_mean_TEPS: 8.72965691341674924e+07
+harmonic_stddev_TEPS: 9.56922662407582102e+04
