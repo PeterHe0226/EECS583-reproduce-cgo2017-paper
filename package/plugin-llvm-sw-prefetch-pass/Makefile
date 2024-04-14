@@ -3,7 +3,7 @@ PLUGIN = SwPrefetchPass
 PLUGIN_OUT = SwPrefetchPass
 
 # LLVM paths. Note: you probably need to update these.
-LLVM_DIR = /local/scratch/sa614/clang
+LLVM_DIR = /usr/local
 LLVM_BUILD_DIR = $(LLVM_DIR)/build
 CLANG_DIR = $(LLVM_DIR)/tools/clang
 CLANG = $(LLVM_BUILD_DIR)/bin/clang

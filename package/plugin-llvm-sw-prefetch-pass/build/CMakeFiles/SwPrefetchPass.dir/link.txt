@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wl,-rpath-link,  -Wl,--gc-sections -shared  -o SwPrefetchPass.so CMakeFiles/SwPrefetchPass.dir/SwPrefetchPass.cc.o  -Wl,-rpath,"\$ORIGIN/../lib:" 
