@@ -13,6 +13,8 @@
 #include "llvm/IR/Verifier.h"
 #include "llvm/Analysis/ValueTracking.h"
 #include "llvm/Transforms/Scalar.h"
+#include "llvm/Passes/PassBuilder.h"
+#include "llvm/Passes/PassPlugin.h"
 
 #include "llvm/Support/raw_ostream.h"
 
@@ -52,8 +54,8 @@ struct SwPrefetchPass : FunctionPass, InstVisitor<SwPrefetchPass>
 
 
     /// Return the name of the pass, for debugging.
-    const char *getPassName() const override {
-        return "Indirect Software Prefetch";
+    StringRef getPassName() const override {
+        return StringRef("Indirect Software Prefetch");
     }
 
 
@@ -327,6 +329,7 @@ struct SwPrefetchPass : FunctionPass, InstVisitor<SwPrefetchPass>
 
 
     bool depthFirstSearch (Instruction* I, LoopInfo &LI, Instruction* &Phi, SmallVector<Instruction*,8> &Instrs, SmallVector<Instruction*,4> &Loads, SmallVector<Instruction*,4> &Phis, std::vector<SmallVector<Instruction*,8>>& Insts) {
+        std::cout << "PLEASE GET HERE" << std::endl;
         Use* u = I->getOperandList();
         Use* end = u + I->getNumOperands();
 
@@ -380,7 +383,7 @@ struct SwPrefetchPass : FunctionPass, InstVisitor<SwPrefetchPass>
             }
             else if(dyn_cast<StoreInst>(v->get())) {}
             else if(dyn_cast<CallInst>(v->get())) {}
-            else if(dyn_cast<TerminatorInst>(v->get())) {}
+            else if(dyn_cast<Instruction>(v->get())->isTerminator()) {}
             else if(LoadInst * linst = dyn_cast<LoadInst>(v->get())) {
 				//Cache results
         
@@ -815,7 +818,7 @@ char SwPrefetchPass::ID;
 /// pass manager.  You can query the builder for the optimisation level and so
 /// on to decide whether to insert the pass.
 void addSwPrefetchPass(const PassManagerBuilder &Builder, legacy::PassManagerBase &PM) {
-    PM.add(createLoopRerollPass());
+    //PM.add(createLoopRerollPass());
     PM.add(new SwPrefetchPass());
     PM.add(createVerifierPass());
 
@@ -825,8 +828,24 @@ void addSwPrefetchPass(const PassManagerBuilder &Builder, legacy::PassManagerBas
 /// builder to call the `addSimplePass` function at the end of adding other
 /// optimisations, so that we can insert the pass.  See the
 /// `PassManagerBuilder` documentation for other extension points.
-RegisterStandardPasses S(PassManagerBuilder::EP_VectorizerStart    ,
-                         addSwPrefetchPass);
+// RegisterStandardPasses S(PassManagerBuilder::EP_VectorizerStart    ,
+//                          addSwPrefetchPass);
 
+static RegisterPass<SwPrefetchPass> X("my-function-pass", "My Function Pass", false, false);
 
 }
+
+// extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginInfo() {
+//   return {
+//     LLVM_PLUGIN_API_VERSION, "HW1Pass", "v0.1",
+//     [](PassBuilder &PB) {
+//       PB.registerPipelineParsingCallback(
+//         [](StringRef Name, FunctionPassManager &FPM,
+//         ArrayRef<PassBuilder::PipelineElement>) {
+//           FPM.addPass(SwPrefetchPass());
+//           return true;
+//         }
+//       );
+//     }
+//   };
+// }
