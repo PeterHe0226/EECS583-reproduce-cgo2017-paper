@@ -483,8 +483,250 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
                          llvm::SmallVector<llvm::Instruction*, 4>& Phis, 
                          std::vector<llvm::SmallVector<llvm::Instruction*, 8>>& Insts )
   {
-    // TODO
-    return false;
+    llvm::Use* u   = I->getOperandList();
+    llvm::Use* end = u + I->getNumOperands();
+
+    llvm::SetVector<llvm::Instruction*> roundInsts;
+
+    bool found = false;
+
+    for (llvm::Use* v = u; v < end; v++)
+    {
+      llvm::PHINode* p = llvm::dyn_cast<llvm::PHINode>(v->get());
+	    llvm::Loop* L = nullptr;
+	    if(p) 
+      {
+        L = LI.getLoopFor(p->getParent());
+      }
+
+      if(p && L && (p == getCanonicalishInductionVariable (L) || p == getWeirdCanonicalishInductionVariable(L))) 
+      {
+        LLVM_DEBUG(llvm::dbgs() << "Loop induction phi node! " << *p << "\n");
+
+        if(Phi) 
+        {
+          if(Phi == p) 
+          {
+            //add this
+            roundInsts.remove(p);
+            roundInsts.insert(p);
+            found = true; //should have been before anyway
+          } 
+          else 
+          {
+            //check which is older.
+            if(LI.getLoopFor(Phi->getParent())->isLoopInvariant(p)) 
+            {
+              //do nothing
+              LLVM_DEBUG(llvm::dbgs() << "not switching phis\n");
+            } 
+            else if (LI.getLoopFor(p->getParent())->isLoopInvariant(Phi)) 
+            {
+              LLVM_DEBUG(llvm::dbgs() << "switching phis\n");
+              roundInsts.clear();
+              roundInsts.insert(p);
+              Phi = p;
+              found = true;
+            } 
+            else 
+            {
+              assert(0);
+            }
+          }
+        } 
+        else 
+        {
+          Phi = p;
+          roundInsts.remove(p);
+          roundInsts.insert(p);
+          found = true;
+        }
+      }
+      else if(llvm::dyn_cast<llvm::StoreInst>(v->get()))
+      {}
+	    else if(llvm::dyn_cast<llvm::CallInst>(v->get()))
+      {}
+	    else if(llvm::dyn_cast<llvm::Instruction>(v->get()) && llvm::dyn_cast<llvm::Instruction>(v->get())->isTerminator())
+      {}
+      else if(llvm::LoadInst* linst = llvm::dyn_cast<llvm::LoadInst>(v->get())) 
+      {
+        //Cache results
+        int lindex=-1;
+        int index=0;
+        for(auto l: Loads) 
+        {
+          if (l == linst)
+          {
+            lindex=index;
+            break;
+          }
+          index++;
+        }
+
+        if(lindex!=-1)
+        {
+          llvm::Instruction* phi = Phis[lindex];
+
+          if(Phi) 
+          {
+            if(Phi == phi) 
+            {
+              //add this
+              for(auto q : Insts[lindex])
+              {
+                roundInsts.remove(q);
+                roundInsts.insert(q);
+              }
+              found = true; //should have been before anyway
+            } 
+            else 
+            {
+              //check which is older.
+              if(LI.getLoopFor(Phi->getParent())->isLoopInvariant(phi)) 
+              {
+                //do nothing
+                LLVM_DEBUG(llvm::dbgs() << "not switching phis\n");
+              } 
+              else if (LI.getLoopFor(phi->getParent())->isLoopInvariant(Phi)) 
+              {
+                LLVM_DEBUG(llvm::dbgs() << "switching phis\n");
+                roundInsts.clear();
+                for(auto q : Insts[lindex]) 
+                {
+                  roundInsts.remove(q);
+                  roundInsts.insert(q);
+                }
+                Phi = phi;
+                found = true;
+              } 
+              else 
+              {
+                assert(0);
+              }
+            }
+          } 
+          else 
+          {
+            for(auto q : Insts[lindex]) 
+            {
+              roundInsts.remove(q);
+              roundInsts.insert(q);
+            }
+            Phi = phi;
+            found = true;
+          }
+        }
+      }
+      else if(v->get())
+      { 
+        if(llvm::Instruction* k = llvm::dyn_cast<llvm::Instruction>(v->get())) 
+        {
+          if(!((!p) || L != nullptr))
+          {
+            continue;
+          }
+
+          llvm::Instruction* j = k;
+
+          llvm::Loop* L = LI.getLoopFor(j->getParent());
+          
+          if(L) 
+          {
+            llvm::SmallVector<llvm::Instruction*, 8> Instrz;
+
+            if(p) 
+            {
+              LLVM_DEBUG(llvm::dbgs() << "Non-loop-induction phi node! " << *p << "\n");
+              
+              j = nullptr;
+              
+              if(!getOddPhiFirst(L,p)) 
+              {
+                return false;
+              }
+              
+              j = llvm::dyn_cast<llvm::Instruction>(getOddPhiFirst(L,p));
+              if(!j) 
+              {
+                return false;
+              }
+
+              Instrz.push_back(k);
+              Instrz.push_back(j);
+              L = LI.getLoopFor(j->getParent());
+
+            } 
+            else 
+            {
+              Instrz.push_back(k);
+            }
+
+            llvm::Instruction* phi = nullptr;
+            if(depthFirstSearch(j,LI,phi, Instrz, Loads, Phis, Insts))
+            {
+              if(Phi) 
+              {
+                if(Phi == phi) 
+                {
+                  //add this
+                  for(auto q : Instrz) 
+                  {
+                    roundInsts.remove(q);
+                    roundInsts.insert(q);
+                  }
+                  found = true; //should have been before anyway
+                } 
+                else 
+                {
+                  //check which is older.
+                  if(LI.getLoopFor(Phi->getParent())->isLoopInvariant(phi)) 
+                  {
+                    //do nothing
+                    LLVM_DEBUG(llvm::dbgs() << "not switching phis\n");
+                  } 
+                  else if (LI.getLoopFor(phi->getParent())->isLoopInvariant(Phi)) 
+                  {
+                    LLVM_DEBUG(llvm::dbgs() << "switching phis\n");
+                    roundInsts.clear();
+                    for(auto q : Instrz) 
+                    {
+                      roundInsts.remove(q);
+                      roundInsts.insert(q);
+                    }
+                    Phi = phi;
+                    found = true;
+                  } 
+                  else 
+                  {
+                    assert(0);
+                  }
+                }
+              } 
+              else 
+              {
+                for(auto q : Instrz) 
+                {
+                  roundInsts.remove(q);
+                  roundInsts.insert(q);
+                }
+                Phi = phi;
+                found = true;
+              }
+            }
+	        }
+	      }
+      }
+    }
+
+    if(found)
+    {
+      for(auto q : roundInsts)
+      {
+        Instrs.push_back(q);
+      }
+    }
+
+    return found;
   }
 
   void initialize(llvm::Function& F)
