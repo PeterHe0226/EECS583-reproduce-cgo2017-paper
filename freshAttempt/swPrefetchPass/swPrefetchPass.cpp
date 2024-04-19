@@ -494,7 +494,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   bool swPrefetchPassImpl(llvm::Function& F)
   {
-    // Required to call at the beginning to initialize llvm_module and data_layout
+    // Required to call at the beginning to initialize llvm_module
     initialize(F);
 
     // TODO - this is the 'runOnFunction' in the original file
@@ -513,7 +513,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
   }
 
   // members
-  llvm::Module*     llvm_module = nullptr;
+  llvm::Module* llvm_module = nullptr;
 };
 }
 
