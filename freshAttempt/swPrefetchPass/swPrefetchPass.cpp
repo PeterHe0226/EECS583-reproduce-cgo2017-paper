@@ -5,8 +5,12 @@
 #include "llvm/Analysis/ValueTracking.h"
 #include "llvm/Transforms/Scalar/LoopUnrollPass.h"
 #include "llvm/IR/Verifier.h"
+#include "llvm/Support/Debug.h"
 
 #include  <iostream>
+
+// To use LLVM_DEBUG
+#define DEBUG_TYPE "SwPrefetchPass"
 
 namespace {
 
@@ -104,7 +108,44 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   llvm::Value* getArrayOrAllocSize(llvm::LoadInst* l) const
   {
-    // TODO
+    LLVM_DEBUG(llvm::dbgs() << "attempting to get size of base array:\n");
+    LLVM_DEBUG(l->getPointerOperand()->print(llvm::dbgs()));
+
+    llvm::GetElementPtrInst* gep = llvm::dyn_cast<llvm::GetElementPtrInst>(l->getPointerOperand());
+
+    if (!gep)
+    {
+      LLVM_DEBUG(llvm::dbgs() << "Couldn't find gep \n");
+      return nullptr;
+    }
+
+    LLVM_DEBUG(llvm::dbgs() << " with ptr: ");
+    LLVM_DEBUG(gep->getPointerOperand()->print(llvm::dbgs()));
+
+    auto ArrayStart = gep->getPointerOperand();
+    
+    if(llvm::ArrayType* at = llvm::dyn_cast<llvm::ArrayType>(gep->getSourceElementType())) 
+    {
+      LLVM_DEBUG(llvm::dbgs() << " and size: ");
+      LLVM_DEBUG(llvm::dbgs() << std::to_string(at->getNumElements()));
+
+      int size = at->getNumElements();
+
+      LLVM_DEBUG(llvm::dbgs() << "and type: " << *(at->getElementType ()));
+
+	    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm_module->getContext()), size);
+    }
+    else if(llvm::AllocaInst* ai = llvm::dyn_cast<llvm::AllocaInst>(ArrayStart)) 
+    {
+      LLVM_DEBUG(llvm::dbgs() << "and dynamic allocated size " << *(ai->getArraySize()));
+      LLVM_DEBUG(llvm::dbgs() << *(ai->getArraySize ()));
+
+      LLVM_DEBUG(llvm::dbgs() << "and type: ");
+      LLVM_DEBUG(llvm::dbgs() << *(gep->getSourceElementType ()));
+
+      return ai->getArraySize ();
+    }
+
     return nullptr;
   }
 
@@ -156,9 +197,38 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return false;
   }
 
+  void initialize(llvm::Function& F)
+  {
+    llvm_module = F.getParent();
+
+    if (data_layout)
+    {
+      delete data_layout;
+    }
+
+    data_layout = new llvm::DataLayout(llvm_module);
+  }
+
+  void deinitialize()
+  {
+    llvm_module = nullptr;
+
+    if (data_layout)
+    {
+      delete data_layout;
+      data_layout = nullptr;
+    }
+  }
+
   bool swPrefetchPassImpl(llvm::Function& F)
   {
+    // Required to call at the beginning to initialize llvm_module and data_layout
+    initialize(F);
+
     // TODO - this is the 'runOnFunction' in the original file
+    
+    // Ensure that this is called before any early termination as well
+    deinitialize();
     return false;
   }
 
@@ -171,6 +241,10 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     // TODO: use the return from the impl function to decide which preserved analyses to return.
     return llvm::PreservedAnalyses::all();
   }
+
+  // members
+  llvm::Module*     llvm_module = nullptr;
+  llvm::DataLayout* data_layout = nullptr;
 };
 }
 
