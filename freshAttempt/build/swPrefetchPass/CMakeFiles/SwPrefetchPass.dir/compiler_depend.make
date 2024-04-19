@@ -473,6 +473,10 @@ swPrefetchPass/CMakeFiles/SwPrefetchPass.dir/swPrefetchPass.cpp.o: ../swPrefetch
   /usr/local/include/llvm/Transforms/Utils/ValueMapper.h \
   /usr/local/include/llvm/Passes/PassPlugin.h \
   /usr/local/include/llvm/Support/DynamicLibrary.h \
+  /usr/local/include/llvm/Analysis/ValueTracking.h \
+  /usr/local/include/llvm/ADT/SmallSet.h \
+  /usr/local/include/llvm/Transforms/Scalar/LoopUnrollPass.h \
+  /usr/local/include/llvm/IR/Verifier.h \
   /usr/include/c++/11/iostream \
   /usr/include/c++/11/ostream \
   /usr/include/c++/11/ios \
@@ -502,6 +506,10 @@ swPrefetchPass/CMakeFiles/SwPrefetchPass.dir/swPrefetchPass.cpp.o: ../swPrefetch
 
 /usr/include/c++/11/ostream:
 
+/usr/local/include/llvm/IR/Verifier.h:
+
+/usr/local/include/llvm/ADT/SmallSet.h:
+
 /usr/local/include/llvm/Support/DynamicLibrary.h:
 
 /usr/local/include/llvm/Passes/PassPlugin.h:
@@ -521,6 +529,8 @@ swPrefetchPass/CMakeFiles/SwPrefetchPass.dir/swPrefetchPass.cpp.o: ../swPrefetch
 /usr/local/include/llvm/Support/CFGUpdate.h:
 
 /usr/local/include/llvm/Support/CFGDiff.h:
+
+/usr/local/include/llvm/Transforms/Scalar/LoopUnrollPass.h:
 
 /usr/include/c++/11/bits/stl_multiset.h:
 
@@ -1191,6 +1201,8 @@ swPrefetchPass/CMakeFiles/SwPrefetchPass.dir/swPrefetchPass.cpp.o: ../swPrefetch
 /usr/include/c++/11/bits/refwrap.h:
 
 /usr/include/c++/11/unordered_map:
+
+/usr/local/include/llvm/Analysis/ValueTracking.h:
 
 /usr/include/c++/11/cctype:
 
