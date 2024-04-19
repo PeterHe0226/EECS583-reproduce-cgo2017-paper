@@ -102,9 +102,73 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   }
 
+  llvm::Value* getArrayOrAllocSize(llvm::LoadInst* l) const
+  {
+    // TODO
+    return nullptr;
+  }
+
+  llvm::Value* getCanonicalishSizeVariable(llvm::Loop* L) const
+  {
+    // TODO
+    return nullptr;
+  }
+
+  llvm::PHINode* getCanonicalishInductionVariable(llvm::Loop* L) const
+  {
+    // TODO
+    return nullptr;
+  }
+
+  llvm::PHINode* getWeirdCanonicalishInductionVariable(llvm::Loop* L) const
+  {
+    // TODO
+    return nullptr;  
+  }
+
+  llvm::GetElementPtrInst* getWeirdCanonicalishInductionVariableGep(llvm::Loop* L) const
+  {
+    // TODO
+    return nullptr;
+  }
+
+  llvm::Value* getWeirdCanonicalishInductionVariableFirst(llvm::Loop* L) const
+  {
+    // TODO
+    return nullptr;
+  }
+
+  llvm::Value* getOddPhiFirst(llvm::Loop* L, llvm::PHINode* PN) const
+  {
+    // TODO
+    return nullptr;
+  }
+
+  bool depthFirstSearch( llvm::Instruction* I, 
+                         llvm::LoopInfo& LI, 
+                         llvm::Instruction*& Phi, 
+                         llvm::SmallVector<llvm::Instruction*, 8>& Instrs, 
+                         llvm::SmallVector<llvm::Instruction*, 4>& Loads, 
+                         llvm::SmallVector<llvm::Instruction*, 4>& Phis, 
+                         std::vector<llvm::SmallVector<llvm::Instruction*, 8>>& Insts )
+  {
+    // TODO
+    return false;
+  }
+
+  bool swPrefetchPassImpl(llvm::Function& F)
+  {
+    // TODO - this is the 'runOnFunction' in the original file
+    return false;
+  }
+
   llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) {
 
     std::cout << "Hello function: " << F.getName().str() << std::endl;
+    // TODO: uncomment the call below to run the pass
+    // swPrefetchPassImpl(F);
+
+    // TODO: use the return from the impl function to decide which preserved analyses to return.
     return llvm::PreservedAnalyses::all();
   }
 };
