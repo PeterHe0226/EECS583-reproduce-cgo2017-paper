@@ -490,24 +490,6 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
   void initialize(llvm::Function& F)
   {
     llvm_module = F.getParent();
-
-    if (data_layout)
-    {
-      delete data_layout;
-    }
-
-    data_layout = new llvm::DataLayout(llvm_module);
-  }
-
-  void deinitialize()
-  {
-    llvm_module = nullptr;
-
-    if (data_layout)
-    {
-      delete data_layout;
-      data_layout = nullptr;
-    }
   }
 
   bool swPrefetchPassImpl(llvm::Function& F)
@@ -516,9 +498,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     initialize(F);
 
     // TODO - this is the 'runOnFunction' in the original file
-    
-    // Ensure that this is called before any early termination as well
-    deinitialize();
+  
     return false;
   }
 
@@ -534,7 +514,6 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   // members
   llvm::Module*     llvm_module = nullptr;
-  llvm::DataLayout* data_layout = nullptr;
 };
 }
 
