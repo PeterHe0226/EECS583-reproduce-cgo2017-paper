@@ -8,13 +8,11 @@
 
 #include  <iostream>
 
-using namespace llvm;
-
 namespace {
 
-struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
+struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
-  bool makeLoopInvariantSpec(Instruction *I, bool &Changed, Loop* L) const {
+  bool makeLoopInvariantSpec(llvm::Instruction *I, bool &Changed, llvm::Loop* L) const {
     // Test if the value is already loop-invariant.
     if (L->isLoopInvariant(I)) {
       return true;
@@ -22,18 +20,18 @@ struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
     // EH block instructions are immobile.
     // Determine the insertion point, unless one was given.
     if(!I) return false;
-    if(!isSafeToSpeculativelyExecute(I) && !I->mayReadFromMemory()) return false; //hacky but it works for now. This is allowed because we're hoisting what are really going to be prefetches.
+    if(!llvm::isSafeToSpeculativelyExecute(I) && !I->mayReadFromMemory()) return false; //hacky but it works for now. This is allowed because we're hoisting what are really going to be prefetches.
 
-    BasicBlock *Preheader = L->getLoopPreheader();
+    llvm::BasicBlock *Preheader = L->getLoopPreheader();
     // Without a preheader, hoisting is not feasible.
     if (!Preheader) {
 	    return false;
     }
-    Instruction* InsertPt = Preheader->getTerminator();
+    llvm::Instruction* InsertPt = Preheader->getTerminator();
 
     // Don't hoist instructions with loop-variant operands.
-    for (Value *Operand : I->operands()) {
-      if(Operand) if(Instruction* i = dyn_cast<Instruction>(Operand)) if (!makeLoopInvariantSpec(i, Changed, L)) {
+    for (llvm::Value *Operand : I->operands()) {
+      if(Operand) if(llvm::Instruction* i = llvm::dyn_cast<llvm::Instruction>(Operand)) if (!makeLoopInvariantSpec(i, Changed, L)) {
         Changed = false;
         return false;
       }
@@ -51,7 +49,7 @@ struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
     return true;
   }
 
-  bool makeLoopInvariantPredecessor(Value *V, bool &Changed, Loop* L) const {
+  bool makeLoopInvariantPredecessor(llvm::Value *V, bool &Changed, llvm::Loop* L) const {
     //if predecessor always runs before the loop, then we can hoist invariant loads, at the expense of exception imprecision.
     //A better technique would retain precision by separating out the first iteration and reusing the invariant loads.
 
@@ -62,10 +60,10 @@ struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
 
     if(!V) return true;
 
-    Instruction* I = dyn_cast<Instruction>(V);
+    llvm::Instruction* I = llvm::dyn_cast<llvm::Instruction>(V);
     if(!I) return false;
 
-    if (!isSafeToSpeculativelyExecute(I) && !I->mayReadFromMemory()) {
+    if (!llvm::isSafeToSpeculativelyExecute(I) && !I->mayReadFromMemory()) {
       return false;
     }
 
@@ -76,15 +74,15 @@ struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
 
     // Determine the insertion point, unless one was given.
 
-    BasicBlock *Preheader = L->getLoopPreheader();
+    llvm::BasicBlock *Preheader = L->getLoopPreheader();
     // Without a preheader, hoisting is not feasible.
     if (!Preheader) {
       return false;
     }
-    Instruction* InsertPt = Preheader->getTerminator();
+    llvm::Instruction* InsertPt = Preheader->getTerminator();
 
     // Don't hoist instructions with loop-variant operands.
-    for (Value *Operand : I->operands()){
+    for (llvm::Value *Operand : I->operands()){
       if (!makeLoopInvariantPredecessor(Operand, Changed,L)) {
         return false;
       }
@@ -104,10 +102,10 @@ struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
 
   }
 
-  PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
+  llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) {
 
     std::cout << "Hello function: " << F.getName().str() << std::endl;
-    return PreservedAnalyses::all();
+    return llvm::PreservedAnalyses::all();
   }
 };
 }
@@ -115,14 +113,14 @@ struct SwPrefetchPass : public PassInfoMixin<SwPrefetchPass> {
 extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginInfo() {
   return {
     LLVM_PLUGIN_API_VERSION, "SwPrefetchPass", "v0.1",
-    [](PassBuilder &PB) {
+    [](llvm::PassBuilder &PB) {
       PB.registerPipelineParsingCallback(
-        [](StringRef Name, FunctionPassManager &FPM,
-        ArrayRef<PassBuilder::PipelineElement>) {
+        [](llvm::StringRef Name, llvm::FunctionPassManager &FPM,
+        llvm::ArrayRef<llvm::PassBuilder::PipelineElement>) {
           if(Name == "func-name"){
-            FPM.addPass(LoopUnrollPass());
+            FPM.addPass(llvm::LoopUnrollPass());
             FPM.addPass(SwPrefetchPass());
-            FPM.addPass(VerifierPass());
+            FPM.addPass(llvm::VerifierPass());
             return true;
           }
           return false;
