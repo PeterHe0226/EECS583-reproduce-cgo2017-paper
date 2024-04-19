@@ -372,7 +372,61 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   llvm::Value* getWeirdCanonicalishInductionVariableFirst(llvm::Loop* L) const
   {
-    // TODO
+    llvm::BasicBlock* H = L->getHeader();
+
+    llvm::BasicBlock* Incoming = nullptr;
+    llvm::BasicBlock* Backedge = nullptr;
+    llvm::pred_iterator PI = llvm::pred_begin(H);
+
+    assert(PI != llvm::pred_end(H) && "Loop must have at least one backedge!");
+
+    Backedge = *PI++;
+    if (PI == llvm::pred_end(H))
+    {
+      // indicates dead loop
+      return nullptr;
+    }
+
+    Incoming = *PI++;
+    if (PI != pred_end(H))
+    {
+      // indicates the possibility of multiple backedges
+      return nullptr;
+    }
+
+    if (L->contains(Incoming))
+    {
+      if (L->contains(Backedge))
+      {
+        return nullptr;
+      }
+      std::swap(Incoming, Backedge);
+    }
+    else if (!L->contains(Backedge))
+    {
+      return nullptr;
+    }
+
+    // Loop over all of the PHI nodes, looking for a canonical indvar.
+    for (llvm::BasicBlock::iterator I = H->begin(); llvm::isa<llvm::PHINode>(I); ++I)
+    {
+      llvm::PHINode* PN = llvm::cast<llvm::PHINode>(I);
+
+      if (llvm::GetElementPtrInst* Inc = llvm::dyn_cast<llvm::GetElementPtrInst>(PN->getIncomingValueForBlock(Backedge)))
+      {
+        if (Inc->getOperand(0) == PN)
+        {
+          if (llvm::ConstantInt* CI = llvm::dyn_cast<llvm::ConstantInt>(Inc->getOperand(Inc->getNumOperands()-1)))
+          {
+            if (CI->equalsInt(1))
+            {
+              return PN->getIncomingValueForBlock(Incoming);
+            }
+          }
+        }
+      }
+    }
+    
     return nullptr;
   }
 
