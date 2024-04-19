@@ -432,8 +432,47 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   llvm::Value* getOddPhiFirst(llvm::Loop* L, llvm::PHINode* PN) const
   {
-    // TODO
-    return nullptr;
+    llvm::BasicBlock* H = L->getHeader();
+
+    llvm::BasicBlock* Incoming = nullptr;
+    llvm::BasicBlock* Backedge = nullptr;
+    llvm::pred_iterator PI = llvm::pred_begin(H);
+
+    assert(PI != llvm::pred_end(H) && "Loop must have at least one backedge!");
+
+    Backedge = *PI++;
+    if (PI == llvm::pred_end(H))
+    {
+      // indicates dead loop
+      return nullptr;
+    }
+
+    Incoming = *PI++;
+    if (PI != pred_end(H))
+    {
+      // indicates the possibility of multiple backedges
+      return nullptr;
+    }
+
+    if(H != PN->getParent())
+    {
+      return nullptr;
+    }
+
+    if (L->contains(Incoming))
+    {
+      if (L->contains(Backedge))
+      {
+        return nullptr;
+      }
+      std::swap(Incoming, Backedge);
+    }
+    else if (!L->contains(Backedge))
+    {
+      return nullptr;
+    }
+
+    return PN->getIncomingValueForBlock(Incoming);
   }
 
   bool depthFirstSearch( llvm::Instruction* I, 
