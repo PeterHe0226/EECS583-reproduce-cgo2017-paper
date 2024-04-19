@@ -408,8 +408,12 @@ swPrefetchPass/CMakeFiles/SwPrefetchPass.dir/swPrefetchPass.cpp.o: \
  /usr/local/include/llvm/Transforms/Utils/ValueMapper.h \
  /usr/local/include/llvm/Passes/PassPlugin.h \
  /usr/local/include/llvm/Support/DynamicLibrary.h \
- /usr/include/c++/11/iostream /usr/include/c++/11/ostream \
- /usr/include/c++/11/ios /usr/include/c++/11/bits/basic_ios.h \
+ /usr/local/include/llvm/Analysis/ValueTracking.h \
+ /usr/local/include/llvm/ADT/SmallSet.h \
+ /usr/local/include/llvm/Transforms/Scalar/LoopUnrollPass.h \
+ /usr/local/include/llvm/IR/Verifier.h /usr/include/c++/11/iostream \
+ /usr/include/c++/11/ostream /usr/include/c++/11/ios \
+ /usr/include/c++/11/bits/basic_ios.h \
  /usr/include/c++/11/bits/locale_facets.h /usr/include/c++/11/cwctype \
  /usr/include/wctype.h /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h \
