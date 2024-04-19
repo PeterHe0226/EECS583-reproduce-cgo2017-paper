@@ -159,7 +159,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
       return nullptr;
     }
 
-    llvm::CmpInst *CI = nullptr;
+    llvm::CmpInst* CI = nullptr;
 
     //really, should be reverse dataflow from the terminating jump
     for (llvm::Instruction& J : *B)
