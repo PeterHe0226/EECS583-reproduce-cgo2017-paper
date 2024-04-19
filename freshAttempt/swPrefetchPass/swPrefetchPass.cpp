@@ -266,14 +266,14 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return false;
   }
 
-  llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) {
-
+  llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) 
+  {
     std::cout << "Hello function: " << F.getName().str() << std::endl;
-    // TODO: uncomment the call below to run the pass
-    // swPrefetchPassImpl(F);
 
-    // TODO: use the return from the impl function to decide which preserved analyses to return.
-    return llvm::PreservedAnalyses::all();
+    bool modified = swPrefetchPassImpl(F);
+
+    auto ret = modified ? llvm::PreservedAnalyses::none() : llvm::PreservedAnalyses::all();
+    return ret;
   }
 
   // members
