@@ -151,7 +151,41 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   llvm::Value* getCanonicalishSizeVariable(llvm::Loop* L) const
   {
-    // TODO
+    // Loop over all of the PHI nodes, looking for a canonical indvar.
+    auto B = L->getExitingBlock();
+    
+    if(!B)
+    {
+      return nullptr;
+    }
+
+    llvm::CmpInst *CI = nullptr;
+
+    //really, should be reverse dataflow from the terminating jump
+    for (llvm::Instruction& J : *B)
+    {
+      llvm::Instruction* I = &J;
+	    CI = llvm::dyn_cast<llvm::CmpInst>(I) ? llvm::dyn_cast<llvm::CmpInst>(I) : CI;
+    }
+
+    bool Changed = false;
+    if (CI)
+    {
+      if(L->makeLoopInvariant(CI->getOperand(1), Changed) 
+         || makeLoopInvariantPredecessor(CI->getOperand(1), Changed, L))
+      {
+        return CI->getOperand(1);
+      }
+
+	    if(L->makeLoopInvariant(CI->getOperand(0), Changed)
+         || makeLoopInvariantPredecessor(CI->getOperand(1), Changed , L))
+      {
+        return CI->getOperand(0);
+      }
+
+	    LLVM_DEBUG(llvm::dbgs() << "Size not loop invariant!" << *(CI->getOperand(0)) << *(CI->getOperand(1)) << "\n");
+    }
+
     return nullptr;
   }
 
