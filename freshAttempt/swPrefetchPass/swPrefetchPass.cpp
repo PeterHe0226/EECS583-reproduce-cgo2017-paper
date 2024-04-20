@@ -12,6 +12,15 @@
 // To use LLVM_DEBUG
 #define DEBUG_TYPE "SwPrefetchPass"
 
+
+#ifndef IGNORE_SIZE
+#define IGNORE_SIZE 0
+#endif
+
+
+#define C_CONSTANT (64)
+
+
 namespace {
 
 struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
@@ -734,21 +743,388 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     llvm_module = F.getParent();
   }
 
-  bool swPrefetchPassImpl(llvm::Function& F)
+  bool swPrefetchPassImpl(llvm::Function& F, llvm::FunctionAnalysisManager &FAM)
   {
     // Required to call at the beginning to initialize llvm_module
     initialize(F);
 
-    // TODO - this is the 'runOnFunction' in the original file
-  
-    return false;
+    llvm::LoopInfo& LI = FAM.getResult<llvm::LoopAnalysis>(F);
+
+    bool modified = false;
+
+    llvm::SmallVector<llvm::Instruction*, 4> Loads;
+    llvm::SmallVector<llvm::Instruction*, 4> Phis;
+    llvm::SmallVector<int, 4> Offsets;
+    llvm::SmallVector<int, 4> MaxOffsets;
+    std::vector<llvm::SmallVector<llvm::Instruction*, 8>> Insts;
+
+    for(auto& BB : F)
+    {
+  	  for (auto& I : BB) 
+      {
+	      if (llvm::LoadInst* i = llvm::dyn_cast<llvm::LoadInst>(&I)) 
+        {
+	        if(LI.getLoopFor(&BB))
+          {
+	          llvm::SmallVector<llvm::Instruction*, 8> Instrz;
+	          Instrz.push_back(i);
+	          llvm::Instruction* phi = nullptr;
+	          if(depthFirstSearch(i,LI,phi,Instrz,  Loads, Phis, Insts)) 
+            {
+		          int loads = 0;
+		          for(auto &z : Instrz)
+              {
+		            if(llvm::dyn_cast<llvm::LoadInst>(z))
+                {
+		              loads++;
+		            }
+		          }
+
+              if(loads < 2) 
+              {
+                LLVM_DEBUG(llvm::dbgs() << "stride\n");    //don't remove the stride cases yet though. Only remove them once we know it's not in a sequence with an indirect.
+#ifdef NO_STRIDES
+                //add a continue in here to avoid generating strided prefetches. Make sure to reduce the value of C accordingly!
+                continue;
+#endif
+              }
+
+              LLVM_DEBUG(llvm::dbgs() << "Can prefetch " << *i << " from PhiNode " << *phi << "\n");
+              LLVM_DEBUG(llvm::dbgs() << "need to change \n");
+              for (auto &z : Instrz) 
+              {
+                LLVM_DEBUG(llvm::dbgs() << *z << "\n");
+              }
+
+              Loads.push_back(i);
+              Insts.push_back(Instrz);
+              Phis.push_back(phi);
+              Offsets.push_back(0);
+              MaxOffsets.push_back(1);
+
+	          }
+	          else
+            {
+		          LLVM_DEBUG(llvm::dbgs() << "Can't prefetch load" << *i << "\n");
+	          }
+	        }
+	      }
+	    }
+    }
+
+    for(uint64_t x = 0; x < Loads.size(); x++) 
+    {
+      llvm::ValueMap<llvm::Instruction*, llvm::Value*> Transforms;
+
+      bool ignore = true;
+
+      llvm::Loop* L = LI.getLoopFor(Phis[x]->getParent());
+
+
+	    for(uint64_t y = x + 1; y < Loads.size(); y++) 
+      {
+	      bool subset = true;
+	      for(auto& in : Insts[x])
+        {
+	        if(std::find(Insts[y].begin(), Insts[y].end(), in) == Insts[y].end())
+          {
+            subset = false;
+          }
+	      }
+        if(subset)
+        {
+          MaxOffsets[x]++;
+          Offsets[y]++;
+          ignore=false;
+        }
+	    }
+
+	    int loads = 0;
+
+	    llvm::LoadInst* firstLoad = NULL;
+
+      for(auto& z : Insts[x])
+      {
+        if(llvm::dyn_cast<llvm::LoadInst>(z))
+        {
+          if(!firstLoad)
+          {
+            firstLoad = llvm::dyn_cast<llvm::LoadInst>(z);
+          }
+          loads++;
+        }
+      }
+
+
+      //loads limited to two on second case, to avoid needing to check bound validity on later loads.
+      if((getCanonicalishSizeVariable(L)) == nullptr) 
+      {
+        if(!getArrayOrAllocSize(firstLoad) || loads > 2)
+        {
+          continue;
+        }
+      }
+
+      if(loads < 2 && ignore)
+      {
+        LLVM_DEBUG(llvm::dbgs() << "Ignoring" << *(Loads[x]) << "\n");
+        continue; //remove strides with no dependent indirects.
+      }
+
+
+	    llvm::IRBuilder<> Builder(Loads[x]);
+
+	    bool tryToPushDown = (LI.getLoopFor(Loads[x]->getParent()) != LI.getLoopFor(Phis[x]->getParent()));
+
+	    if(tryToPushDown)
+      {
+        LLVM_DEBUG(llvm::dbgs() << "Trying to push down!\n");
+      }
+
+      //reverse list.
+      llvm::SmallVector<llvm::Instruction*, 8> newInsts;
+	    
+      for(auto q = Insts[x].end()-1; q > Insts[x].begin()-1; q--)
+      {
+        newInsts.push_back(*q);
+      }
+	    
+      for(auto& z : newInsts) 
+      {
+	      if(Transforms.count(z))
+        {
+          continue;
+        }
+
+        if(z == Phis[x]) 
+        {
+          llvm::Instruction* n;
+
+          bool weird = false;
+
+          llvm::Loop* L = LI.getLoopFor(Phis[x]->getParent());
+
+          int offset = (C_CONSTANT*MaxOffsets[x])/(MaxOffsets[x]+Offsets[x]);
+
+          if(z == getCanonicalishInductionVariable(L))
+          {
+            n = llvm::dyn_cast<llvm::Instruction>(Builder.CreateAdd(Phis[x],
+                                                                    Phis[x]->getType()->isIntegerTy(64) ? llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm_module->getContext()), offset) 
+                                                                                                        : llvm::ConstantInt::get(llvm::Type::getInt32Ty(llvm_module->getContext()), offset)));
+#ifdef BROKEN
+            n = llvm::dyn_cast<llvm::Instruction>(Builder.CreateAnd(n, 1));
+#endif
+          }
+          else if (z == getWeirdCanonicalishInductionVariable(L))
+          {
+            //This covers code where a pointer is incremented, instead of a canonical induction variable.
+
+            n = getWeirdCanonicalishInductionVariableGep(L)->clone();
+            Builder.Insert(n);
+            n->setOperand(n->getNumOperands()-1, llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm_module->getContext()), offset));
+            weird = true;
+
+            bool changed = true;
+            while(LI.getLoopFor(Phis[x]->getParent()) != LI.getLoopFor(n->getParent()) && changed)
+            {
+              llvm::Loop* ol = LI.getLoopFor(n->getParent());
+
+              makeLoopInvariantSpec(n, changed, LI.getLoopFor(n->getParent()));
+
+              if(ol && ol == LI.getLoopFor(n->getParent()))
+              {
+                break;
+              }
+            }
+          }
+
+          assert(L);
+          assert(n);
+
+          llvm::Value* size = getCanonicalishSizeVariable(L);
+          if(!size) 
+          {
+            size = getArrayOrAllocSize(firstLoad);
+          }
+          assert(size);
+          std::string type_str;
+          llvm::raw_string_ostream rso(type_str);
+          size->getType()->print(rso);
+          rso.flush();
+        
+          if(loads< 2 || !size || !size->getType()->isIntegerTy() || IGNORE_SIZE)
+          {
+            Transforms.insert(std::pair<llvm::Instruction*, llvm::Instruction*>(z,n));
+            continue;
+          }
+
+          llvm::Instruction* mod;
+
+          if(weird)
+          {
+            //This covers code where a pointer is incremented, instead of a canonical induction variable.
+
+            llvm::Instruction* endcast = llvm::dyn_cast<llvm::Instruction>(Builder.CreatePtrToInt(size, llvm::Type::getInt64Ty(llvm_module->getContext())));
+
+            llvm::Instruction* startcast = llvm::dyn_cast<llvm::Instruction>(Builder.CreatePtrToInt(getWeirdCanonicalishInductionVariableFirst(L), llvm::Type::getInt64Ty(llvm_module->getContext())));
+
+            llvm::Instruction* valcast =  llvm::dyn_cast<llvm::Instruction>(Builder.CreatePtrToInt(n, llvm::Type::getInt64Ty(llvm_module->getContext())));
+
+
+            llvm::Instruction* sub1 = llvm::dyn_cast<llvm::Instruction>(Builder.CreateSub(valcast, startcast));
+            llvm::Instruction* sub2 = llvm::dyn_cast<llvm::Instruction>(Builder.CreateSub(endcast, startcast));
+
+            llvm::Value* cmp = Builder.CreateICmp(llvm::CmpInst::ICMP_SLT, sub1, sub2);
+            llvm::Instruction* rem = llvm::dyn_cast<llvm::Instruction>(Builder.CreateSelect(cmp, sub1, sub2));
+
+            llvm::Instruction* add = llvm::dyn_cast<llvm::Instruction>(Builder.CreateAdd(rem, startcast));
+
+            mod = llvm::dyn_cast<llvm::Instruction>(Builder.CreateIntToPtr(add, n->getType()));
+          }
+          else if(size->getType() != n->getType())
+          {
+            llvm::Instruction* cast = llvm::CastInst::CreateIntegerCast(size, n->getType(), true);
+            assert(cast);
+            Builder.Insert(cast);
+            llvm::Value* sub = Builder.CreateSub(cast, llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm_module->getContext()), 1));
+            llvm::Value* cmp = Builder.CreateICmp(llvm::CmpInst::ICMP_SLT, sub, n);
+            mod = llvm::dyn_cast<llvm::Instruction>(Builder.CreateSelect(cmp, sub, n));
+          } 
+          else 
+          {
+            llvm::Value* sub = Builder.CreateSub(size, llvm::ConstantInt::get(n->getType(), 1));
+            llvm::Value* cmp = Builder.CreateICmp(llvm::CmpInst::ICMP_SLT, sub, n);
+            mod = llvm::dyn_cast<llvm::Instruction>(Builder.CreateSelect(cmp, sub, n));
+          }
+
+
+          bool changed = true;
+          while(LI.getLoopFor(Phis[x]->getParent()) != LI.getLoopFor(mod->getParent()) && changed)
+          {
+            llvm::Loop* ol = LI.getLoopFor(mod->getParent());
+            makeLoopInvariantSpec(mod, changed,LI.getLoopFor(mod->getParent()));
+            if(ol && ol == LI.getLoopFor(mod->getParent()))
+            {
+              break;
+            }
+          }
+
+          Transforms.insert(std::pair<llvm::Instruction*, llvm::Instruction*>(z, mod));
+          modified = true;
+	      } 
+        else if (z == Loads[x])
+        {
+          assert(Loads[x]->getOperand(0));
+
+          llvm::Instruction* oldGep = llvm::dyn_cast<llvm::Instruction>(Loads[x]->getOperand(0));
+          assert(oldGep);
+
+          assert(Transforms.lookup(oldGep));
+          llvm::Instruction* gep = llvm::dyn_cast<llvm::Instruction>(Transforms.lookup(oldGep));
+          assert(gep);
+          modified = true;
+
+
+          llvm::Instruction* cast = llvm::dyn_cast<llvm::Instruction>(Builder.CreateBitCast (gep, llvm::Type::getInt8PtrTy(llvm_module->getContext())));
+
+          bool changed = true;
+          while(LI.getLoopFor(Phis[x]->getParent()) != LI.getLoopFor(cast->getParent()) && changed) 
+          {
+            llvm::Loop* ol = LI.getLoopFor(cast->getParent());
+            makeLoopInvariantSpec(cast,changed,ol);
+            if(ol && ol == LI.getLoopFor(cast->getParent()))
+            {
+              break;
+            }
+          }
+
+
+          llvm::Value* ar[] = { cast,
+                                llvm::ConstantInt::get(llvm::Type::getInt32Ty(llvm_module->getContext()), 0),
+                                llvm::ConstantInt::get(llvm::Type::getInt32Ty(llvm_module->getContext()), 3),
+                                llvm::ConstantInt::get(llvm::Type::getInt32Ty(llvm_module->getContext()), 1) };
+          
+          llvm::ArrayRef<llvm::Type*> art = { llvm::Type::getInt8PtrTy(llvm_module->getContext()) };
+          
+          llvm::Function* fun = llvm::Intrinsic::getDeclaration(llvm_module, llvm::Intrinsic::prefetch, art);
+
+          assert(fun);
+
+          llvm::CallInst* call = llvm::CallInst::Create(fun,ar);
+
+          call->insertBefore(cast->getParent()->getTerminator());
+
+        } 
+        else if(llvm::PHINode* pn = llvm::dyn_cast<llvm::PHINode>(z)) 
+        {
+          llvm::Value* v = getOddPhiFirst(LI.getLoopFor(pn->getParent()),pn);
+          
+          if(v)
+          {
+            if(llvm::Instruction* ins = llvm::dyn_cast<llvm::Instruction>(v))
+            {
+              v = Transforms.lookup(ins);
+            }
+            Transforms.insert(std::pair<llvm::Instruction*, llvm::Value*>(z,v));
+            } 
+            else 
+            {
+              Transforms.insert(std::pair<llvm::Instruction*, llvm::Value*>(z,z));
+            }
+        }
+        else 
+        {
+
+          llvm::Instruction* n = z->clone();
+
+          llvm::Use* u = n->getOperandList();
+          int64_t size = n->getNumOperands();
+        
+          for(int64_t x = 0; x<size; x++)
+          {
+            llvm::Value* v = u[x].get();
+            assert(v);
+            if(llvm::Instruction* t = llvm::dyn_cast<llvm::Instruction>(v))
+            {
+              if(Transforms.count(t))
+              {
+                n->setOperand(x,Transforms.lookup(t));
+              }
+            }
+          }
+
+          n->insertBefore(Loads[x]);
+
+          bool changed = true;
+          while(changed && LI.getLoopFor(Phis[x]->getParent()) != LI.getLoopFor(n->getParent()))
+          {
+            changed = false;
+
+            makeLoopInvariantSpec(n,changed,LI.getLoopFor(n->getParent()));
+            if(changed)
+            {
+              LLVM_DEBUG(llvm::dbgs()<< "moved loop" << *n << "\n");
+            }
+            else
+            {
+              LLVM_DEBUG(llvm::dbgs()<< "not moved loop" << *n << "\n");
+            }
+          }
+
+          Transforms.insert(std::pair<llvm::Instruction*, llvm::Instruction*>(z,n));
+          modified = true;
+        }
+      }
+	  }
+
+    return modified;
   }
 
   llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) 
   {
     std::cout << "Hello function: " << F.getName().str() << std::endl;
 
-    bool modified = swPrefetchPassImpl(F);
+    bool modified = swPrefetchPassImpl(F, FAM);
 
     auto ret = modified ? llvm::PreservedAnalyses::none() : llvm::PreservedAnalyses::all();
     return ret;
