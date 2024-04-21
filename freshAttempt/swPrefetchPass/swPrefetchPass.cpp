@@ -1143,7 +1143,7 @@ extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK llvmGetPassPluginIn
         [](llvm::StringRef Name, llvm::FunctionPassManager &FPM,
         llvm::ArrayRef<llvm::PassBuilder::PipelineElement>) {
           if(Name == "func-name"){
-            FPM.addPass(llvm::LoopUnrollPass());
+            // FPM.addPass(llvm::LoopUnrollPass());
             FPM.addPass(SwPrefetchPass());
             FPM.addPass(llvm::VerifierPass());
             return true;
