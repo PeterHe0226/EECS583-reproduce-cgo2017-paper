@@ -38,7 +38,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     llvm::BasicBlock *Preheader = L->getLoopPreheader();
     // Without a preheader, hoisting is not feasible.
     if (!Preheader) {
-	    return false;
+      return false;
     }
     llvm::Instruction* InsertPt = Preheader->getTerminator();
 
@@ -82,7 +82,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
     // EH block instructions are immobile.
     if (I->isEHPad()) {
-	    return false;
+      return false;
     }
 
     // Determine the insertion point, unless one was given.
@@ -142,7 +142,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
       LLVM_DEBUG(llvm::dbgs() << "and type: " << *(at->getElementType ()));
 
-	    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm_module->getContext()), size);
+      return llvm::ConstantInt::get(llvm::Type::getInt64Ty(llvm_module->getContext()), size);
     }
     else if(llvm::AllocaInst* ai = llvm::dyn_cast<llvm::AllocaInst>(ArrayStart)) 
     {
@@ -174,7 +174,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     for (llvm::Instruction& J : *B)
     {
       llvm::Instruction* I = &J;
-	    CI = llvm::dyn_cast<llvm::CmpInst>(I) ? llvm::dyn_cast<llvm::CmpInst>(I) : CI;
+      CI = llvm::dyn_cast<llvm::CmpInst>(I) ? llvm::dyn_cast<llvm::CmpInst>(I) : CI;
     }
 
     bool Changed = false;
@@ -186,13 +186,13 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
         return CI->getOperand(1);
       }
 
-	    if(L->makeLoopInvariant(CI->getOperand(0), Changed)
+      if(L->makeLoopInvariant(CI->getOperand(0), Changed)
          || makeLoopInvariantPredecessor(CI->getOperand(1), Changed , L))
       {
         return CI->getOperand(0);
       }
 
-	    LLVM_DEBUG(llvm::dbgs() << "Size not loop invariant!" << *(CI->getOperand(0)) << *(CI->getOperand(1)) << "\n");
+      LLVM_DEBUG(llvm::dbgs() << "Size not loop invariant!" << *(CI->getOperand(0)) << *(CI->getOperand(1)) << "\n");
     }
 
     return nullptr;
@@ -224,11 +224,11 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
     if (L->contains(Incoming))
     {
-	    if (L->contains(Backedge))
-	    {
+      if (L->contains(Backedge))
+      {
         return nullptr;
       }
-	    std::swap(Incoming, Backedge);
+      std::swap(Incoming, Backedge);
     }
     else if (!L->contains(Backedge))
     {
@@ -502,8 +502,8 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     for (llvm::Use* v = u; v < end; v++)
     {
       llvm::PHINode* p = llvm::dyn_cast<llvm::PHINode>(v->get());
-	    llvm::Loop* L = nullptr;
-	    if(p) 
+      llvm::Loop* L = nullptr;
+      if(p) 
       {
         L = LI.getLoopFor(p->getParent());
       }
@@ -553,9 +553,9 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
       }
       else if(llvm::dyn_cast<llvm::StoreInst>(v->get()))
       {}
-	    else if(llvm::dyn_cast<llvm::CallInst>(v->get()))
+      else if(llvm::dyn_cast<llvm::CallInst>(v->get()))
       {}
-	    else if(llvm::dyn_cast<llvm::Instruction>(v->get()) && llvm::dyn_cast<llvm::Instruction>(v->get())->isTerminator())
+      else if(llvm::dyn_cast<llvm::Instruction>(v->get()) && llvm::dyn_cast<llvm::Instruction>(v->get())->isTerminator())
       {}
       else if(llvm::LoadInst* linst = llvm::dyn_cast<llvm::LoadInst>(v->get())) 
       {
@@ -722,8 +722,8 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
                 found = true;
               }
             }
-	        }
-	      }
+          }
+        }
       }
     }
 
@@ -760,25 +760,25 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
     for(auto& BB : F)
     {
-  	  for (auto& I : BB) 
+      for (auto& I : BB) 
       {
-	      if (llvm::LoadInst* i = llvm::dyn_cast<llvm::LoadInst>(&I)) 
+        if (llvm::LoadInst* i = llvm::dyn_cast<llvm::LoadInst>(&I)) 
         {
-	        if(LI.getLoopFor(&BB))
+          if(LI.getLoopFor(&BB))
           {
-	          llvm::SmallVector<llvm::Instruction*, 8> Instrz;
-	          Instrz.push_back(i);
-	          llvm::Instruction* phi = nullptr;
-	          if(depthFirstSearch(i,LI,phi,Instrz,  Loads, Phis, Insts)) 
+            llvm::SmallVector<llvm::Instruction*, 8> Instrz;
+            Instrz.push_back(i);
+            llvm::Instruction* phi = nullptr;
+            if(depthFirstSearch(i,LI,phi,Instrz,  Loads, Phis, Insts)) 
             {
-		          int loads = 0;
-		          for(auto &z : Instrz)
+              int loads = 0;
+              for(auto &z : Instrz)
               {
-		            if(llvm::dyn_cast<llvm::LoadInst>(z))
+                if(llvm::dyn_cast<llvm::LoadInst>(z))
                 {
-		              loads++;
-		            }
-		          }
+                  loads++;
+                }
+              }
 
               if(loads < 2) 
               {
@@ -802,14 +802,14 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
               Offsets.push_back(0);
               MaxOffsets.push_back(1);
 
-	          }
-	          else
+            }
+            else
             {
-		          LLVM_DEBUG(llvm::dbgs() << "Can't prefetch load" << *i << "\n");
-	          }
-	        }
-	      }
-	    }
+              LLVM_DEBUG(llvm::dbgs() << "Can't prefetch load" << *i << "\n");
+            }
+          }
+        }
+      }
     }
 
     for(uint64_t x = 0; x < Loads.size(); x++) 
@@ -821,27 +821,27 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
       llvm::Loop* L = LI.getLoopFor(Phis[x]->getParent());
 
 
-	    for(uint64_t y = x + 1; y < Loads.size(); y++) 
+      for(uint64_t y = x + 1; y < Loads.size(); y++) 
       {
-	      bool subset = true;
-	      for(auto& in : Insts[x])
+        bool subset = true;
+        for(auto& in : Insts[x])
         {
-	        if(std::find(Insts[y].begin(), Insts[y].end(), in) == Insts[y].end())
+          if(std::find(Insts[y].begin(), Insts[y].end(), in) == Insts[y].end())
           {
             subset = false;
           }
-	      }
+        }
         if(subset)
         {
           MaxOffsets[x]++;
           Offsets[y]++;
           ignore=false;
         }
-	    }
+      }
 
-	    int loads = 0;
+      int loads = 0;
 
-	    llvm::LoadInst* firstLoad = NULL;
+      llvm::LoadInst* firstLoad = NULL;
 
       for(auto& z : Insts[x])
       {
@@ -872,26 +872,26 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
       }
 
 
-	    llvm::IRBuilder<> Builder(Loads[x]);
+      llvm::IRBuilder<> Builder(Loads[x]);
 
-	    bool tryToPushDown = (LI.getLoopFor(Loads[x]->getParent()) != LI.getLoopFor(Phis[x]->getParent()));
+      bool tryToPushDown = (LI.getLoopFor(Loads[x]->getParent()) != LI.getLoopFor(Phis[x]->getParent()));
 
-	    if(tryToPushDown)
+      if(tryToPushDown)
       {
         LLVM_DEBUG(llvm::dbgs() << "Trying to push down!\n");
       }
 
       //reverse list.
       llvm::SmallVector<llvm::Instruction*, 8> newInsts;
-	    
+      
       for(auto q = Insts[x].end()-1; q > Insts[x].begin()-1; q--)
       {
         newInsts.push_back(*q);
       }
-	    
+      
       for(auto& z : newInsts) 
       {
-	      if(Transforms.count(z))
+        if(Transforms.count(z))
         {
           continue;
         }
@@ -1011,7 +1011,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
           Transforms.insert(std::pair<llvm::Instruction*, llvm::Instruction*>(z, mod));
           modified = true;
-	      } 
+        } 
         else if (z == Loads[x])
         {
           assert(Loads[x]->getOperand(0));
@@ -1115,7 +1115,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
           modified = true;
         }
       }
-	  }
+    }
 
     return modified;
   }
