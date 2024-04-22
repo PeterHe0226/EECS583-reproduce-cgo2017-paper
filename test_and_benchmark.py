@@ -24,36 +24,50 @@ def build_benchmarks():
     do_cmd(["./compile_x86.sh"], "./program/nas-cg")
     do_cmd(["./compile_x86.sh"], "./program/randacc")
 
-def run_graph500_benchmark():
-    print("TODO - graph500")
-
-def run_hj2_benchmark():
-    print("TODO - hj2")
-
-def run_hj8_benchmark():
-    print("TODO - hj8")
-
-def run_nas_cg_benchmark(save):
-    commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
-    workdir = "./program/nas-cg"
-    if (save):
-        output_dir = BENCHMARK_OUTPUT_DIR / "nas-cg"
-        if not output_dir.exists():
-            output_dir.mkdir() 
-        
+def run_benchmark(commands, workdir):
+    global args
+    global timestamp
+    if (args.save):
+        output_dir = BENCHMARK_OUTPUT_DIR / workdir.strip("/").split("/")[-1] / timestamp
+        output_dir.mkdir(parents=True) 
         output_dir = output_dir.resolve()
         
-        timestamp = datetime.now().strftime("%m-%d-%y_%I:%M%p")
+        output_commands = []
         for command in commands:
             executable_name = command[0].split('/')[-1]
-            command.extend(["|", f"tee {output_dir / (executable_name + timestamp)}.txt"])
-            command = ' '.join(command)
-            
+            command.extend(["|", f"tee {output_dir / executable_name}.txt"])
+            output_commands.append(' '.join(command))
+        commands = output_commands
+
     for command in commands:
         do_cmd(command, workdir)
 
+def run_graph500_benchmark():
+    commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
+    workdir = "./program/graph500"
+    run_benchmark(commands, workdir)
+
+def run_hj2_benchmark():
+    commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
+    workdir = "./program/hashjoin-ph-2"
+    run_benchmark(commands, workdir)
+
+def run_hj8_benchmark():
+    commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
+    workdir = "./program/hashjoin-ph-8"
+    run_benchmark(commands, workdir)
+
+def run_nas_cg_benchmark():
+    commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
+    workdir = "./program/nas-cg"
+    run_benchmark(commands, workdir)
+
 def run_randacc_benchmark():
-    print("TODO - randacc")
+    pass
+    # TODO these commands take an argument. Need to align on what are sensible parameters
+    # commands = [["bin/x86/randacc-no"], ["bin/x86/randacc-auto"], ["bin/x86/randacc-auto-new"]]
+    # workdir = "./program/randacc"
+    # run_benchmark(commands, workdir)
 
 def run_all_benchmarks():
     run_graph500_benchmark()
@@ -63,6 +77,8 @@ def run_all_benchmarks():
     run_randacc_benchmark()
 
 if __name__ == "__main__":
+    global args
+    global timestamp
     args = parse_args()
     original_exists = os.path.isfile("./freshAttempt/build/swPrefetchPass/SwPrefetchPass.so")
     new_exists      = os.path.isfile("./freshAttempt/build/swPrefetchPass/SwPrefetchPass_new.so")
@@ -74,6 +90,7 @@ if __name__ == "__main__":
 
     execute = True
     while execute:
+        timestamp = datetime.now().strftime("%m-%d-%y_%I:%M%p")
         print("a - run all benchmarks")
         print("b - build all tests")
         print("1 - run graph500  benchmark")
@@ -99,7 +116,7 @@ if __name__ == "__main__":
             case '3':
                 run_hj8_benchmark()
             case '4':
-                run_nas_cg_benchmark(args.save)
+                run_nas_cg_benchmark()
             case '5':
                 run_randacc_benchmark()
             case 's':
