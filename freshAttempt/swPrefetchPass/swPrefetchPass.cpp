@@ -17,8 +17,9 @@
 #define IGNORE_SIZE 0
 #endif
 
-
+#ifndef COMPUTE_C_CONST
 #define C_CONSTANT (64)
+#endif
 
 
 namespace {
@@ -743,6 +744,14 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     llvm_module = F.getParent();
   }
 
+#ifdef COMPUTE_C_CONST
+  int ComputeCConst()
+  {
+    // TODO
+    return 64;
+  }
+#endif
+
   bool swPrefetchPassImpl(llvm::Function& F, llvm::FunctionAnalysisManager &FAM)
   {
     // Required to call at the beginning to initialize llvm_module
@@ -904,7 +913,15 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
           llvm::Loop* L = LI.getLoopFor(Phis[x]->getParent());
 
-          int offset = (C_CONSTANT*MaxOffsets[x])/(MaxOffsets[x]+Offsets[x]);
+          int c_const = 0;
+
+#ifdef COMPUTE_C_CONST
+          c_const = ComputeCConst();
+#else
+          c_const = C_CONSTANT;
+#endif
+
+          int offset = (c_const*MaxOffsets[x])/(MaxOffsets[x]+Offsets[x]);
 
           if(z == getCanonicalishInductionVariable(L))
           {
