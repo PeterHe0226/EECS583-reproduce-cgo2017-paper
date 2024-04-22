@@ -18,11 +18,11 @@ def do_cmd(command, dir):
     p.wait()
 
 def build_benchmarks():
-    do_cmd(["sh", "./compile_x86.sh"], "./program/graph500")
-    do_cmd(["sh", "./compile_x86.sh"], "./program/hashjoin-ph-2")
-    do_cmd(["sh", "./compile_x86.sh"], "./program/hashjoin-ph-8")
-    do_cmd(["sh", "./compile_x86.sh"], "./program/nas-cg")
-    do_cmd(["sh", "./compile_x86.sh"], "./program/randacc")
+    do_cmd(["./compile_x86.sh"], "./program/graph500")
+    do_cmd(["./compile_x86.sh"], "./program/hashjoin-ph-2")
+    do_cmd(["./compile_x86.sh"], "./program/hashjoin-ph-8")
+    do_cmd(["./compile_x86.sh"], "./program/nas-cg")
+    do_cmd(["./compile_x86.sh"], "./program/randacc")
 
 def run_graph500_benchmark():
     print("TODO - graph500")
