@@ -1143,6 +1143,8 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
     bool modified = swPrefetchPassImpl(F, FAM);
 
+    std::cout << "Modified: " << modified << std::endl;
+
     auto ret = modified ? llvm::PreservedAnalyses::none() : llvm::PreservedAnalyses::all();
     return ret;
   }
