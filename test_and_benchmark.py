@@ -13,8 +13,8 @@ def parse_args():
     parser.add_argument("-s", "--save", help="Save benchmark output in benchmark_output/", action="store_true")
     return parser.parse_args()
 
-def do_cmd(command, dir):
-    p = subprocess.Popen(command, cwd=dir, shell=True)
+def do_cmd(command, dir, use_shell=True):
+    p = subprocess.Popen(command, cwd=dir, shell=use_shell)
     p.wait()
 
 def build_benchmarks():
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     if not original_exists or not new_exists:
         print("!!! Required shared libs not found... building them now !!!")
         time.sleep(1)
-        do_cmd(['python3', 'build_pass.py', '-c'], './')
+        do_cmd(['python3', 'build_pass.py', '-c'], './', False)
 
     execute = True
     while execute:
