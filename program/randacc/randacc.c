@@ -47,7 +47,8 @@
 //#include <hpcc.h>
 
 #include <stdlib.h>
- #include <stdint.h>
+ #include <stdint.h> 
+ #include <stdio.h>
 //#include "RandomAccess.h"
 
 #define POLY 0x0000000000000007ULL
@@ -136,6 +137,11 @@ main(int argc, char* argv[]) {
   u64Int *Table;
   u64Int logTableSize, TableSize;
 
+  if (argc < 2)
+  {
+    printf("pass in size for total memory... usage: ./randacc-X ###\n");
+    return -1;
+  }
 
   /* calculate local memory per node for the update table */
   totalMem = atoi(argv[1]);
