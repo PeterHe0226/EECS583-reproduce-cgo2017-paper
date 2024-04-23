@@ -8,6 +8,7 @@
 #include "llvm/Support/Debug.h"
 
 #include  <iostream>
+#include <array>
 
 // To use LLVM_DEBUG
 #define DEBUG_TYPE "SwPrefetchPass"
@@ -745,9 +746,58 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
   }
 
 #ifdef COMPUTE_C_CONST
+  double getCpuClockSpeed()
+  {
+    // TODO
+    return 0.0;
+  }
+
+  int getTotalCores()
+  {
+    // TODO
+    return 0;
+  }
+
+  std::array<int, 3> getCacheSize()
+  {
+    // TODO
+    return std::array<int, 3>();
+  }
+
+  double getRamSize()
+  {
+    // TODO
+    return 0.0;
+  }
+
+  double getRamSpeed()
+  {
+    // TODO
+    return 0.0;
+  }
+
+  double getRamLatency()
+  {
+    // TODO
+    return 0.0;
+  }
+
+  double getPageSize()
+  {
+    // TODO
+    return 0.0;
+  }
+
   int ComputeCConst()
   {
     // TODO
+    // clock speed
+    // cores/threads
+    // cache size
+    // ram size
+    // ram speed
+    // ram latency
+    // page size
     return 64;
   }
 #endif
