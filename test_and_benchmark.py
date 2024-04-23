@@ -5,6 +5,7 @@ import time
 import argparse
 import pathlib
 from datetime import datetime
+import re
 
 BENCHMARK_OUTPUT_DIR = pathlib.Path("./benchmark_output")
 
@@ -24,11 +25,16 @@ def build_benchmarks():
     do_cmd(["./compile_x86.sh"], "./program/nas-cg")
     do_cmd(["./compile_x86.sh"], "./program/randacc")
 
+def generate_output_dir(workdir):
+    global timestamp
+    output_dir = BENCHMARK_OUTPUT_DIR / workdir.strip("/").split("/")[-1] / timestamp
+    return output_dir
+
 def run_benchmark(commands, workdir):
     global args
     global timestamp
     if (args.save):
-        output_dir = BENCHMARK_OUTPUT_DIR / workdir.strip("/").split("/")[-1] / timestamp
+        output_dir = generate_output_dir(workdir)
         output_dir.mkdir(parents=True) 
         output_dir = output_dir.resolve()
         
@@ -42,39 +48,91 @@ def run_benchmark(commands, workdir):
     for command in commands:
         do_cmd(command, workdir)
 
+def get_files_to_parse(commands, workdir):
+    global args
+    
+    files = []
+    
+    if args.save:
+        output_dir = generate_output_dir(workdir)
+        for command in commands:
+            file = output_dir / (command[0].split('/')[-1] + ".txt")
+            files.append(file)
+
+    return files
+
+def create_pretty_print_text(benchmark, times):
+    s  = '\n'
+    s += '*********************************************************\n'
+    s += 'Benchmark:    ' + benchmark + '\n'
+    s +=  'Normal:       ' + str(times[0]) + '\n'
+    s +=  'Prefetch:     ' + str(times[1]) + '\n'
+    s +=  'New Prefetch: ' + str(times[2]) + '\n'
+    s += '*********************************************************\n'
+    s += '\n'
+
+    return s
+
+def try_parse_results(commands, workdir, regex):
+    ret = ''
+
+    files = get_files_to_parse(commands, workdir)
+    times = []
+    for file in files:
+        with open(file, 'r') as f:
+            data = f.read()
+            match = re.search(regex, data)
+            if match:
+                times.append(float(match.group(1)))
+    if len(times) > 0:
+        test_name = workdir.split('/')[-1]
+        ret = create_pretty_print_text(test_name, times)
+
+    return ret
+
 def run_graph500_benchmark():
     commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
     workdir = "./program/graph500"
     run_benchmark(commands, workdir)
+
+    return try_parse_results(commands, workdir, r"max_time: (\d+\.\d+e[+-]\d+)")
 
 def run_hj2_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
     workdir = "./program/hashjoin-ph-2"
     run_benchmark(commands, workdir)
 
+    return try_parse_results(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+
 def run_hj8_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
     workdir = "./program/hashjoin-ph-8"
     run_benchmark(commands, workdir)
+
+    return try_parse_results(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
 
 def run_nas_cg_benchmark():
     commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
     workdir = "./program/nas-cg"
     run_benchmark(commands, workdir)
 
+    return try_parse_results(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
+
 def run_randacc_benchmark():
-    pass
+    return ''
     # TODO these commands take an argument. Need to align on what are sensible parameters
     # commands = [["bin/x86/randacc-no"], ["bin/x86/randacc-auto"], ["bin/x86/randacc-auto-new"]]
     # workdir = "./program/randacc"
     # run_benchmark(commands, workdir)
 
 def run_all_benchmarks():
-    run_graph500_benchmark()
-    run_hj2_benchmark()
-    run_hj8_benchmark()
-    run_nas_cg_benchmark()
-    run_randacc_benchmark()
+    results = ''
+    results += run_graph500_benchmark()
+    results += run_hj2_benchmark()
+    results += run_hj8_benchmark()
+    results += run_nas_cg_benchmark()
+    results += run_randacc_benchmark()
+    return results
 
 if __name__ == "__main__":
     global args
@@ -104,21 +162,23 @@ if __name__ == "__main__":
         user_in = input(">> ")
         print("")
 
+        results = ''
+
         match user_in:
             case 'a':
-                run_all_benchmarks()
+                results = run_all_benchmarks()
             case 'b':
                 build_benchmarks()
             case '1':
-                run_graph500_benchmark()
+                results = run_graph500_benchmark()
             case '2':
-                run_hj2_benchmark()
+                results = run_hj2_benchmark()
             case '3':
-                run_hj8_benchmark()
+                results = run_hj8_benchmark()
             case '4':
-                run_nas_cg_benchmark()
+                results = run_nas_cg_benchmark()
             case '5':
-                run_randacc_benchmark()
+                results = run_randacc_benchmark()
             case 's':
                 args.save = not args.save
             case 'e':
@@ -126,4 +186,4 @@ if __name__ == "__main__":
             case _:
                 print("invalid option!")
         
-        print("")
+        print(results)
