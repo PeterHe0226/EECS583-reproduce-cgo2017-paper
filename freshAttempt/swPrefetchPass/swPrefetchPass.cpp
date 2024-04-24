@@ -29,6 +29,8 @@
 
 namespace {
 
+const std::array<double, 5> K_VALUES{-0.009309007357754038,-0.6902547322677854,-0.01174499830280426,5.290974393057368e-06,0.02107176132152629};
+
 struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   bool makeLoopInvariantSpec(llvm::Instruction *I, bool &Changed, llvm::Loop* L) const {
@@ -816,15 +818,27 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   int ComputeCConst()
   {
-    // TODO
-    // clock speed
-    // cores/threads
-    // cache size
-    // ram size
-    // ram speed
-    // ram latency
-    // page size
-    return 64;
+    double cpuSpeed = getCpuClockSpeed();
+    double cores = getTotalCores();
+    double cacheSize = getCacheSize();
+    double ramSize = getRamSize();
+    double pageSize = getPageSize();
+    
+    double c_const = K_VALUES[0] * cpuSpeed
+                   + K_VALUES[1] * cores
+                   + K_VALUES[2] * cacheSize
+                   + K_VALUES[3] * ramSize
+                   + K_VALUES[4] * pageSize;
+                   
+    std::cout << "cpu speed: " << cpuSpeed << std::endl;
+    std::cout << "cores: " << cores  << std::endl;
+    std::cout << "cache size: " << cacheSize  << std::endl;
+    std::cout << "ram size: " << ramSize  << std::endl;
+    std::cout << "page size: " << pageSize  << std::endl;
+
+    std::cout << "Calculated C Const Value: " << c_const << " ... will be cast to " << static_cast<int>(c_const) << std::endl;
+
+    return static_cast<int>(c_const);
   }
 #endif
 
