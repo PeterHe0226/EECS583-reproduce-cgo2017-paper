@@ -9,6 +9,7 @@
 
 #include  <iostream>
 #include <array>
+#include <fstream>
 
 // To use LLVM_DEBUG
 #define DEBUG_TYPE "SwPrefetchPass"
@@ -746,6 +747,25 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
   }
 
 #ifdef COMPUTE_C_CONST
+  double getInfoFromSysFile(std::string sys_file, std::string key)
+  {
+    double value = 0.0f;
+
+    std::string current;
+    std::ifstream file(sys_file);
+    while (file >> current)
+    {     
+      if (current == key)
+      {
+        file >> value;
+        break; 
+      }
+      file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+    return value;
+  }
+
   double getCpuClockSpeed()
   {
     // TODO
@@ -766,26 +786,12 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   double getRamSize()
   {
-    // TODO
-    return 0.0;
-  }
-
-  double getRamSpeed()
-  {
-    // TODO
-    return 0.0;
-  }
-
-  double getRamLatency()
-  {
-    // TODO
-    return 0.0;
+    return getInfoFromSysFile("/proc/meminfo", "MemTotal:");
   }
 
   double getPageSize()
   {
-    // TODO
-    return 0.0;
+    return getInfoFromSysFile("/proc/meminfo", "Hugepagesize:");
   }
 
   int ComputeCConst()
