@@ -1,0 +1,47 @@
+[
+    {
+        "machine": "eecs583a",
+        "clock_speed": 3800,
+        "cpu_cores": 4,
+        "cache_size": 8192,
+        "ram_size": 65620296,
+        "page_size": 2048,
+        "optimal_c_value": 256
+    },
+    {
+        "machine": "haswell",
+        "clock_speed": 3200,
+        "cpu_cores": 4,
+        "cache_size": 256,
+        "ram_size": 16777216,
+        "page_size": 512,
+        "optimal_c_value": 64
+    },
+    {
+        "machine": "xeon-phi",
+        "clock_speed": 1100,
+        "cpu_cores": 57,
+        "cache_size": 512,
+        "ram_size": 6291456,
+        "page_size": 4096,
+        "optimal_c_value": 64
+    },
+    {
+        "machine": "a57",
+        "clock_speed": 1900,
+        "cpu_cores": 4,
+        "cache_size": 2048,
+        "ram_size": 4194304,
+        "page_size": 4096,
+        "optimal_c_value": 64
+    },
+    {
+        "machine": "a53",
+        "clock_speed": 2000,
+        "cpu_cores": 4,
+        "cache_size": 1024,
+        "ram_size": 2097152,
+        "page_size": 4096,
+        "optimal_c_value": 64
+    }
+]
