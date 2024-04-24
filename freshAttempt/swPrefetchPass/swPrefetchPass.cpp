@@ -10,6 +10,9 @@
 #include  <iostream>
 #include <array>
 #include <fstream>
+#include <limits>
+#include <sstream>
+#include <string>
 
 // To use LLVM_DEBUG
 #define DEBUG_TYPE "SwPrefetchPass"
@@ -766,19 +769,39 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return value;
   }
 
+  double getInfoFromSysFileWithLine(std::string sys_file, std::string s1, std::string s2, std::string s3){
+    double value = 0.0f;
+    std::ifstream file(sys_file);
+    std::string line;
+    while (std::getline(file, line))
+    {
+
+      std::istringstream iss(line);
+      std::string a, b, c;
+      if (!(iss >> a >> b >> c)) { continue; }
+
+      if (a == s1 && b == s2 && c == s3){
+        iss >> value;
+        break;
+      }
+    }
+
+    return value;
+  }
+
   double getCpuClockSpeed()
   {
-    return getInfoFromSysFile("/proc/cpuinfo", "cpu MHz		:");
+    return getInfoFromSysFileWithLine("/proc/cpuinfo", "cpu", "MHz", ":");
   }
 
-  int getTotalCores()
+  double getTotalCores()
   {
-    return getInfoFromSysFile("/proc/cpuinfo", "cpu cores	:");
+    return getInfoFromSysFileWithLine("/proc/cpuinfo", "cpu", "cores", ":");
   }
 
-  int getCacheSize()
+  double getCacheSize()
   {
-    return getInfoFromSysFile("/proc/cpuinfo", "cache size	:");
+    return getInfoFromSysFileWithLine("/proc/cpuinfo", "cache", "size", ":");
   }
 
   double getRamSize()
