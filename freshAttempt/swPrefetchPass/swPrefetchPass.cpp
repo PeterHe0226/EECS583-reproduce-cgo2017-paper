@@ -768,20 +768,17 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   double getCpuClockSpeed()
   {
-    // TODO
-    return 0.0;
+    return getInfoFromSysFile("/proc/cpuinfo", "cpu MHz		:");
   }
 
   int getTotalCores()
   {
-    // TODO
-    return 0;
+    return getInfoFromSysFile("/proc/cpuinfo", "cpu cores	:");
   }
 
-  std::array<int, 3> getCacheSize()
+  int getCacheSize()
   {
-    // TODO
-    return std::array<int, 3>();
+    return getInfoFromSysFile("/proc/cpuinfo", "cache size	:");
   }
 
   double getRamSize()
