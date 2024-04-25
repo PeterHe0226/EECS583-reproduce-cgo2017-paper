@@ -1,7 +1,7 @@
 [
     {
         "machine": "eecs583a",
-        "clock_speed": 3800,
+        "clock_speed": 3.8,
         "cpu_cores": 4,
         "cache_size": 8192,
         "ram_size": 65620296,
@@ -10,7 +10,7 @@
     },
     {
         "machine": "haswell",
-        "clock_speed": 3200,
+        "clock_speed": 3.2,
         "cpu_cores": 4,
         "cache_size": 256,
         "ram_size": 16777216,
@@ -19,7 +19,7 @@
     },
     {
         "machine": "xeon-phi",
-        "clock_speed": 1100,
+        "clock_speed": 1.1,
         "cpu_cores": 57,
         "cache_size": 512,
         "ram_size": 6291456,
@@ -28,7 +28,7 @@
     },
     {
         "machine": "a57",
-        "clock_speed": 1900,
+        "clock_speed": 1.9,
         "cpu_cores": 4,
         "cache_size": 2048,
         "ram_size": 4194304,
@@ -37,7 +37,7 @@
     },
     {
         "machine": "a53",
-        "clock_speed": 2000,
+        "clock_speed": 2.0,
         "cpu_cores": 4,
         "cache_size": 1024,
         "ram_size": 2097152,
