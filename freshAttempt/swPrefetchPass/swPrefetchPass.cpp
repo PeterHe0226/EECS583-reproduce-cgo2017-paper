@@ -793,7 +793,30 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
   double getCpuClockSpeed()
   {
-    return getInfoFromSysFileWithLine("/proc/cpuinfo", "cpu", "MHz", ":");
+
+    double value = 0.0f;
+    std::ifstream file("/proc/cpuinfo");
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::istringstream iss(line);
+        std::string a, b, last;
+        if (!(iss >> a >> b)) { continue; }
+
+        if (a == "model" && b == "name"){
+            while(iss >> last){
+            }
+
+            if (last.length() > 3) {
+                last.erase(last.length() - 3);
+            }
+
+            value = stod(last);
+            break;
+        }
+    }
+
+    return value;
   }
 
   double getTotalCores()
