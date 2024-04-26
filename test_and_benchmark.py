@@ -125,6 +125,9 @@ def run_randacc_benchmark():
     # workdir = "./program/randacc"
     # run_benchmark(commands, workdir)
 
+def rebuild_pass():
+    do_cmd(['python3', 'build_pass.py', '-c'], './', False)
+
 def run_all_benchmarks():
     results = ''
     results += run_graph500_benchmark()
@@ -144,13 +147,15 @@ if __name__ == "__main__":
     if not original_exists or not new_exists:
         print("!!! Required shared libs not found... building them now !!!")
         time.sleep(1)
-        do_cmd(['python3', 'build_pass.py', '-c'], './', False)
+        rebuild_pass()
 
     execute = True
     while execute:
         timestamp = datetime.now().strftime("%m-%d-%y_%I:%M%p")
         print("a - run all benchmarks")
-        print("b - build all tests")
+        print("p - rebuild the pass")
+        print("t - build all benchmarks")
+        print("b - rebuild the pass and all benchmarks")
         print("1 - run graph500  benchmark")
         print("2 - run hashjoin2 benchmark")
         print("3 - run hashjoin8 benchmark")
@@ -167,7 +172,12 @@ if __name__ == "__main__":
         match user_in:
             case 'a':
                 results = run_all_benchmarks()
+            case 'p':
+                rebuild_pass()
+            case 't':
+                build_benchmarks()
             case 'b':
+                rebuild_pass()
                 build_benchmarks()
             case '1':
                 results = run_graph500_benchmark()
