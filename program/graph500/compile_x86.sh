@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Function to parse IPC from a report and append to a file
 parse_and_append_ipc() {
     local report_file="$1"
@@ -21,7 +19,7 @@ parse_and_append_ipc() {
     fi
 
     # save the IPC value to the output file
-    echo "$ipc_value" > "$output_file"
+    echo "$ipc_value" >> "$output_file"
 
 }
 
