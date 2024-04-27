@@ -49,6 +49,7 @@
 #include <stdlib.h>
  #include <stdint.h> 
  #include <stdio.h>
+ #include <time.h>
 //#include "RandomAccess.h"
 
 #define POLY 0x0000000000000007ULL
@@ -143,6 +144,8 @@ main(int argc, char* argv[]) {
     return -1;
   }
 
+  clock_t start = clock();
+
   /* calculate local memory per node for the update table */
   totalMem = atoi(argv[1]);
   totalMem /= sizeof(u64Int);
@@ -209,7 +212,11 @@ main(int argc, char* argv[]) {
 */
   free( Table );
 
+  clock_t end = clock();
+  double elapsed_us = (double)(end - start);
+  double elapsed_ms = elapsed_us / 1000.0f;
 
+  printf("Time in milliseconds: %f\n", elapsed_ms);
 
   return 0;
 }
