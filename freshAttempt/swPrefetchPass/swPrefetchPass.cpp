@@ -851,7 +851,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     }
     else
     {
-      std::cerr << "Unable to open file: " << filePath << std::endl;
+      std::cerr << "Unable to open file" << std::endl;
       return -1; // Return -1 or another error code to indicate failure
     }
 
