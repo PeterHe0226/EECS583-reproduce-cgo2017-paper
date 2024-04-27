@@ -26,8 +26,8 @@ parse_and_append_ipc() {
 # Compile seq-csr to assembly
 clang -O3 -mllvm --x86-asm-syntax=intel -march=native -S seq-csr/seq-csr.c -o seq-csr.s
 # Analyze the assembly with llvm-mca
-llvm-mca -mcpu=native seq-csr.s > report.txt
-parse_and_append_ipc "report.txt" "../../values.txt"
+#llvm-mca -mcpu=native seq-csr.s > report.txt
+#parse_and_append_ipc "report.txt" "../../values.txt"
 # Optionally compile the assembly file to an object file
 clang -c seq-csr.s -o seq-csr.o
 gcc -flto -g -std=c99 -Wall -O3 -I./generator   seq-csr.o graph500.c options.c rmat.c kronecker.c verify.c prng.c xalloc.c timer.c generator/splittable_mrg.c generator/graph_generator.c generator/make_graph.c generator/utils.c  -lm -lrt -o bin/x86/g500-no

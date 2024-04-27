@@ -28,8 +28,8 @@ clang -O3 cg.c -c
 # Compile seq-csr to assembly
 clang -O3 -mllvm --x86-asm-syntax=intel -march=native -S cg.ll -o cg.s
 # Analyze the assembly with llvm-mca
-llvm-mca -mcpu=native cg.s > report.txt
-parse_and_append_ipc "report.txt" "../../values.txt"
+#llvm-mca -mcpu=native cg.s > report.txt
+#parse_and_append_ipc "report.txt" "../../values.txt"
 # Optionally compile the assembly file to an object file
 clang -O3 -c cg.s -o cg.o
 clang -O3 cg.o ../nas-common/c_print_results.c ../nas-common/c_timers.c ../nas-common/wtime.c -lm ../nas-common/c_randdp.c -o bin/x86/cg-auto-new
