@@ -76,7 +76,7 @@ def write_to_csv(file_path, data):
     with open(file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         
-        writer.writerow(['no', 'auto', 'auto-new', 'Constant'])
+        writer.writerow(['Constant','no', 'auto', 'auto-new'])
         
         for row in data:
             writer.writerow(row)
@@ -92,7 +92,7 @@ def main():
     file_path = pathlib.Path('./freshAttempt/swPrefetchPass/swPrefetchPass.cpp')
 
     exit_option = 'e'
-    build_option = 'p'
+    build_option = 'b'
     test_option = '4'
     test_script_name = 'test_and_benchmark.py'
 
@@ -104,9 +104,10 @@ def main():
         modify_cpp_constant(file_path, constant_val)
 
         output = run_script_with_inputs(test_script_name,test_option, exit_option,build_option)
-        output.append(constant_val)
         if test_option == '4':
-            run_time = catch_time_nas_cg(output)
+            run_time = [constant_val]
+            run_time.extend(catch_time_nas_cg(output))
+            
             time_list.append(run_time)
 
     
