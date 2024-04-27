@@ -27,8 +27,8 @@ parse_and_append_ipc() {
 # Compile seq-csr to assembly
 clang -O3 -mllvm --x86-asm-syntax=intel -march=native -S randacc.c -o randacc.s
 # Analyze the assembly with llvm-mca
-llvm-mca -mcpu=native randacc.s > report.txt
-parse_and_append_ipc "report.txt" "../../values.txt"
+#llvm-mca -mcpu=native randacc.s > report.txt
+#parse_and_append_ipc "report.txt" "../../values.txt"
 # Optionally compile the assembly file to an object file
 clang -O3 randacc.c -o bin/x86/randacc-no
 
