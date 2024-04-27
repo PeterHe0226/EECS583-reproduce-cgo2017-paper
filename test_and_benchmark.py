@@ -112,7 +112,8 @@ def run_hj8_benchmark():
     return try_parse_results(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
 
 def run_nas_cg_benchmark():
-    commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
+    #commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
+    commands = [["bin/x86/cg-auto"]]
     workdir = "./program/nas-cg"
     run_benchmark(commands, workdir)
 
