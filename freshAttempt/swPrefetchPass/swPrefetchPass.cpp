@@ -871,17 +871,11 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return -1; // Return -1 if line index is out of range
   }
 
- double ipcToPercentage(double ipc)
+ /*double adjustCconstant(double c, double ipc)
   {
-    // Define the IPC boundaries and corresponding percentages
-    double x1 = 1.06, y1 = 200; // IPC = 1.06 corresponds to 110%
-    double x2 = 1.71, y2 = 50;  // IPC = 2.07 corresponds to 80%
+    c = c- 96*(ipc-1.06);
 
-    // Calculate the percentage using linear interpolation
-    double percentage = y1 + ((ipc - x1) * (y2 - y1) / (x2 - x1));
-
-    return percentage;
-  }
+  }*/
 
   int ComputeCConst()
   {
@@ -894,7 +888,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
 
     double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
-    c_const = c_const * ipcToPercentage(ipc);
+    c_const = c_const - 96 * (ipc - 1.06);
 
     std::cout << "cpu speed: " << cpuSpeed << std::endl;
     std::cout << "cores: " << cores  << std::endl;
