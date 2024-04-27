@@ -857,18 +857,11 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
       if (currentLine == lineIndex) // Check if the current line is the desired line
       {
         // Convert line to double
-        try
-        {
+        
           ipcValue = std::stod(line);
           file.close();
           return ipcValue;
-        }
-        catch ()
-        {
-          std::cerr << "Invalid number found at line " << lineIndex << std::endl;
-          file.close();
-          return -1;
-        }
+        
       }
       currentLine++; // Increment line counter
     }
