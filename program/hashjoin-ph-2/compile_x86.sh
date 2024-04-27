@@ -29,7 +29,7 @@ cd src
 clang -O3 -mllvm --x86-asm-syntax=intel -march=native -S npj2epb.c -o npj2epb.s
 # Analyze the assembly with llvm-mca
 llvm-mca -mcpu=native npj2epb.s > report.txt
-parse_and_append_ipc "report.txt" "../../values.txt"
+parse_and_append_ipc "report.txt" "../../../values.txt"
 # Optionally compile the assembly file to an object file
 clang -c npj2epb.s -o npj2epb.o
 gcc -flto -g -std=c99 -Wall -O3 npj2epb.o main.c generator.c genzipf.c perf_counters.c cpu_mapping.c parallel_radix_join.c -lpthread -lm -std=c99  -o bin/x86/hj2-no
