@@ -839,6 +839,25 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return getInfoFromSysFile("/proc/meminfo", "Hugepagesize:");
   }
 
+  double readIPCValue()
+  {
+    std::ifstream file("../../values.txt"); // Open the file
+    double ipcValue = 0.0;        // Variable to store the IPC value
+
+    if (file.is_open())
+    {
+      file >> ipcValue; // Read the IPC value from the file
+      file.close();     // Close the file
+    }
+    else
+    {
+      std::cerr << "Unable to open file: " << filePath << std::endl;
+      return -1; // Return -1 or another error code to indicate failure
+    }
+
+    return ipcValue; // Return the IPC value read from the file
+  }
+
   int ComputeCConst()
   {
     double cpuSpeed = getCpuClockSpeed();
@@ -846,13 +865,10 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     double cacheSize = getCacheSize();
     double ramSize = getRamSize();
     double pageSize = getPageSize();
-    
-    double c_const = K_VALUES[0] * cpuSpeed
-                   + K_VALUES[1] * cores
-                   + K_VALUES[2] * cacheSize
-                   + K_VALUES[3] * ramSize
-                   + K_VALUES[4] * pageSize;
-                   
+    double ipc = readIPCValue();
+
+    double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
+
     std::cout << "cpu speed: " << cpuSpeed << std::endl;
     std::cout << "cores: " << cores  << std::endl;
     std::cout << "cache size: " << cacheSize  << std::endl;
