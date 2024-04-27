@@ -95,8 +95,6 @@ def try_parse_results(commands, workdir, regex):
             if match:
                 times.append(float(match.group(1)))
 
-    print(times)
-
     if not args.save:
         # delete the temp out director
         dir = generate_output_dir(workdir)
