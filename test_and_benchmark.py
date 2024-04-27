@@ -91,7 +91,8 @@ def try_parse_results(commands, workdir, regex):
     return ret
 
 def run_graph500_benchmark():
-    commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
+    #commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
+    commands = [["bin/x86/g500-auto"]]
     workdir = "./program/graph500"
     run_benchmark(commands, workdir)
 
