@@ -122,8 +122,8 @@ def repeat_benchmark(commands, workdir, regex):
     return create_pretty_print_text(test_name, total_times)
 
 def run_graph500_benchmark():
-    #commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
-    commands = [["bin/x86/g500-auto"]]
+    commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
+    #commands = [["bin/x86/g500-auto"]]
     workdir = "./program/graph500"
 
     return repeat_benchmark(commands, workdir, r"median_time: (\d+\.\d+e[+-]\d+)")
