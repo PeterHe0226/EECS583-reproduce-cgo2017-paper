@@ -863,7 +863,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
           file.close();
           return ipcValue;
         }
-        catch (const std::invalid_argument &ia)
+        catch 
         {
           std::cerr << "Invalid number found at line " << lineIndex << std::endl;
           file.close();
