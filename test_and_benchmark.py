@@ -126,7 +126,7 @@ def run_graph500_benchmark():
     commands = [["bin/x86/g500-auto"]]
     workdir = "./program/graph500"
 
-    return repeat_benchmark(commands, workdir, r"max_time: (\d+\.\d+e[+-]\d+)")
+    return repeat_benchmark(commands, workdir, r"median_time: (\d+\.\d+e[+-]\d+)")
 
 def run_hj2_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
