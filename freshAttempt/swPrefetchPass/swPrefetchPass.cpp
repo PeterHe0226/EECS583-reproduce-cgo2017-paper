@@ -23,7 +23,7 @@
 #endif
 
 #ifndef COMPUTE_C_CONST
-#define C_CONSTANT (256)
+#define C_CONSTANT (32)
 #endif
 
 
