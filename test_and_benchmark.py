@@ -95,6 +95,8 @@ def try_parse_results(commands, workdir, regex):
             if match:
                 times.append(float(match.group(1)))
 
+    print(times)
+
     if not args.save:
         # delete the temp out director
         dir = generate_output_dir(workdir)
@@ -147,11 +149,10 @@ def run_nas_cg_benchmark():
     return repeat_benchmark(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
 
 def run_randacc_benchmark():
-    return ''
-    # TODO these commands take an argument. Need to align on what are sensible parameters
-    # commands = [["bin/x86/randacc-no"], ["bin/x86/randacc-auto"], ["bin/x86/randacc-auto-new"]]
-    # workdir = "./program/randacc"
-    # run_benchmark(commands, workdir)
+    commands = [["bin/x86/randacc-no", "100000000"], ["bin/x86/randacc-auto", "100000000"], ["bin/x86/randacc-auto-new", "100000000"]]
+    workdir = "./program/randacc"
+    
+    return repeat_benchmark(commands, workdir, r"Time in milliseconds:\s*(\d+\.\d+)")
 
 def rebuild_pass():
     do_cmd(['python3', 'build_pass.py', '-c'], './', False)
