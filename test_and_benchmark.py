@@ -7,6 +7,7 @@ import pathlib
 from datetime import datetime
 import re
 import shutil
+import csv
 
 BENCHMARK_OUTPUT_DIR = pathlib.Path("./benchmark_output")
 BENCHMARK_TEMP_OUTPUT_DIR = pathlib.Path("./temp_output")
@@ -73,13 +74,14 @@ def get_files_to_parse(commands, workdir):
 
 def create_pretty_print_text(benchmark, times):
     s  = '\n'
-    s += '*********************************************************\n'
-    s += 'Benchmark:    ' + benchmark + '\n'
-    s +=  'Normal:       ' + str(times[0]) + '\n'
-    s +=  'Prefetch:     ' + str(times[1]) + '\n'
-    s +=  'New Prefetch: ' + str(times[2]) + '\n'
-    s += '*********************************************************\n'
-    s += '\n'
+    if (len(times) > 1):
+        s += '*********************************************************\n'
+        s += 'Benchmark:    ' + benchmark + '\n'
+        s +=  'Normal:       ' + str(times[0]) + '\n'
+        s +=  'Prefetch:     ' + str(times[1]) + '\n'
+        s +=  'New Prefetch: ' + str(times[2]) + '\n'
+        s += '*********************************************************\n'
+        s += '\n'
 
     return s
 
@@ -103,7 +105,7 @@ def try_parse_results(commands, workdir, regex):
     return times
 
 def repeat_benchmark(commands, workdir, regex):
-    total_times = [0, 0, 0]
+    total_times = [0] * len(commands)
     test_name = workdir.split('/')[-1]
     for i in range(TEST_REPITITIONS):
         print("")
@@ -111,63 +113,150 @@ def repeat_benchmark(commands, workdir, regex):
         print("")
         run_benchmark(commands, workdir)
         temp = try_parse_results(commands, workdir, regex)
-        total_times[0] += temp[0]
-        total_times[1] += temp[1]
-        total_times[2] += temp[2]
+        for i in range(len(total_times)):
+            total_times[i] += temp[i]
 
-    total_times[0] /= TEST_REPITITIONS
-    total_times[1] /= TEST_REPITITIONS
-    total_times[2] /= TEST_REPITITIONS
+    for i in range(len(total_times)):
+        total_times[i] /= TEST_REPITITIONS
 
     return create_pretty_print_text(test_name, total_times), total_times
 
-def run_graph500_benchmark():
-    commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
-    #commands = [["bin/x86/g500-auto"]]
+def run_graph500_benchmark(run_only_standard_prefetch = False):
+    if run_only_standard_prefetch:
+        commands = [["bin/x86/g500-auto"]]
+    else:
+        commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
+
     workdir = "./program/graph500"
 
-    ret, ignore = repeat_benchmark(commands, workdir, r"median_time: (\d+\.\d+e[+-]\d+)")
-    return ret
+    return repeat_benchmark(commands, workdir, r"median_time: (\d+\.\d+e[+-]\d+)")
 
-def run_hj2_benchmark():
-    commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
+def run_hj2_benchmark(run_only_standard_prefetch = False):
+    if run_only_standard_prefetch:
+        commands = [["src/bin/x86/hj2-auto"]]
+    else:
+        commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
+    
     workdir = "./program/hashjoin-ph-2"
     
-    ret, ignore = repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
-    return ret
+    return repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
 
-def run_hj8_benchmark():
-    commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
+def run_hj8_benchmark(run_only_standard_prefetch = False):
+    if run_only_standard_prefetch:
+        commands = [["src/bin/x86/hj2-auto"]]
+    else:
+        commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
+
     workdir = "./program/hashjoin-ph-8"
     
-    ret, ignore = repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
-    return ret
+    return repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
 
-def run_nas_cg_benchmark():
-    commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
+def run_nas_cg_benchmark(run_only_standard_prefetch = False):
+    if run_only_standard_prefetch:
+        commands = [["bin/x86/cg-auto"]]
+    else:
+        commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
+    
     workdir = "./program/nas-cg"
 
-    ret, ignore = repeat_benchmark(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
-    return ret
+    return repeat_benchmark(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
 
-def run_randacc_benchmark():
-    commands = [["bin/x86/randacc-no", "100000000"], ["bin/x86/randacc-auto", "100000000"], ["bin/x86/randacc-auto-new", "100000000"]]
+def run_randacc_benchmark(run_only_standard_prefetch = False):
+    if run_only_standard_prefetch:
+        commands = [["bin/x86/randacc-auto", "100000000"]]
+    else:
+        commands = [["bin/x86/randacc-no", "100000000"], ["bin/x86/randacc-auto", "100000000"], ["bin/x86/randacc-auto-new", "100000000"]]
+
     workdir = "./program/randacc"
     
-    ret, ignore = repeat_benchmark(commands, workdir, r"Time in milliseconds:\s*(\d+\.\d+)")
-    return ret
+    return repeat_benchmark(commands, workdir, r"Time in milliseconds:\s*(\d+\.\d+)")
+
+def modify_cpp_constant(new_value):
+
+    pattern = re.compile(r'^#define C_CONSTANT \(\d+\)$')
+
+    file_path = "./freshAttempt/swPrefetchPass/swPrefetchPass.cpp" 
+
+    lines = []
+
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    
+    with open(file_path, 'w') as file:
+        for line in lines:
+            if pattern.match(line.strip()):
+                # Replace the existing value with the new value
+                line = f'#define C_CONSTANT ({new_value})\n'
+            file.write(line)
+
+def find_optimal_c_value():
+    current = 16
+
+    g500 = []
+    hj2  = []
+    hj8  = []
+    cg   = []
+    rand = []
+
+    for i in range(5): 
+        modify_cpp_constant(current)
+        rebuild_pass()
+        build_benchmarks()
+        ignore, times = run_all_benchmarks(True)
+
+        g500.append(times[0][0])
+        hj2.append(times[1][0])
+        hj8.append(times[2][0])
+        cg.append(times[3][0])
+        rand.append(times[4][0])
+
+        current = current * 2
+
+    with open("./optimal_c_value_out.csv", mode='w', newline='') as file:
+        writer = csv.writer(file)
+
+        writer.writerow(['test', '16', '32', '64', '128', '256'])
+
+        temp = g500
+        writer.writerow(['g500', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        temp = hj2
+        writer.writerow(['hj2', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        temp = hj8
+        writer.writerow(['hj8', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        temp = cg
+        writer.writerow(['cg', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        temp = rand
+        writer.writerow(['rand', temp[0], temp[1], temp[2], temp[3], temp[4]])
+
+    # restore original value in cpp file, pass, and benchmarks
+    modify_cpp_constant(64)
+    rebuild_pass()
+    build_benchmarks()
+
 
 def rebuild_pass():
     do_cmd(['python3', 'build_pass.py', '-c'], './', False)
 
-def run_all_benchmarks():
+def run_all_benchmarks(run_only_standard_prefetch = False):
     results = ''
-    results += run_graph500_benchmark()
-    results += run_hj2_benchmark()
-    results += run_hj8_benchmark()
-    results += run_nas_cg_benchmark()
-    results += run_randacc_benchmark()
-    return results
+    times = []
+    s, t = run_graph500_benchmark(run_only_standard_prefetch)
+    results += s
+    times.append(t)
+    s, t = run_hj2_benchmark(run_only_standard_prefetch)
+    results += s
+    times.append(t)
+    s, t = run_hj8_benchmark(run_only_standard_prefetch)
+    results += s
+    times.append(t)
+    s, t = run_nas_cg_benchmark(run_only_standard_prefetch)
+    results += s
+    times.append(t)
+    s, t = run_randacc_benchmark(run_only_standard_prefetch)
+    results += s
+    times.append(t)
+    return results, times
 
 if __name__ == "__main__":
     global args
@@ -188,6 +277,7 @@ if __name__ == "__main__":
         print("p - rebuild the pass")
         print("t - build all benchmarks")
         print("b - rebuild the pass and all benchmarks")
+        print("f - find optimal c value")
         print("1 - run graph500  benchmark")
         print("2 - run hashjoin2 benchmark")
         print("3 - run hashjoin8 benchmark")
@@ -203,7 +293,7 @@ if __name__ == "__main__":
 
         match user_in:
             case 'a':
-                results = run_all_benchmarks()
+                results, ignore = run_all_benchmarks()
             case 'p':
                 rebuild_pass()
             case 't':
@@ -211,16 +301,18 @@ if __name__ == "__main__":
             case 'b':
                 rebuild_pass()
                 build_benchmarks()
+            case 'f':
+                find_optimal_c_value()
             case '1':
-                results = run_graph500_benchmark()
+                results, ignore = run_graph500_benchmark()
             case '2':
-                results = run_hj2_benchmark()
+                results, ignore = run_hj2_benchmark()
             case '3':
-                results = run_hj8_benchmark()
+                results, ignore = run_hj8_benchmark()
             case '4':
-                results = run_nas_cg_benchmark()
+                results, ignore = run_nas_cg_benchmark()
             case '5':
-                results = run_randacc_benchmark()
+                results, ignore = run_randacc_benchmark()
             case 's':
                 args.save = not args.save
             case 'e':
