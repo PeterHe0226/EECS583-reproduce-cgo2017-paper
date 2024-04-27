@@ -839,23 +839,43 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return getInfoFromSysFile("/proc/meminfo", "Hugepagesize:");
   }
 
-  double readIPCValue()
+  double readIPCValue(int lineIndex)
   {
     std::ifstream file("../../values.txt"); // Open the file
-    double ipcValue = 0.0;        // Variable to store the IPC value
+    double ipcValue = 0.0;                  // Variable to store the IPC value
+    int currentLine = 0;                    // Current line number
 
-    if (file.is_open())
-    {
-      file >> ipcValue; // Read the IPC value from the file
-      file.close();     // Close the file
-    }
-    else
+    if (!file.is_open())
     {
       std::cerr << "Unable to open file" << std::endl;
       return -1; // Return -1 or another error code to indicate failure
     }
 
-    return ipcValue; // Return the IPC value read from the file
+    std::string line;
+    while (getline(file, line)) // Read lines until end of file
+    {
+      if (currentLine == lineIndex) // Check if the current line is the desired line
+      {
+        // Convert line to double
+        try
+        {
+          ipcValue = std::stod(line);
+          file.close();
+          return ipcValue;
+        }
+        catch (const std::invalid_argument &ia)
+        {
+          std::cerr << "Invalid number found at line " << lineIndex << std::endl;
+          file.close();
+          return -1;
+        }
+      }
+      currentLine++; // Increment line counter
+    }
+
+    file.close(); // Make sure to close the file if the desired line is not found
+    std::cerr << "Line index out of range" << std::endl;
+    return -1; // Return -1 if line index is out of range
   }
 
   int ComputeCConst()
@@ -865,7 +885,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     double cacheSize = getCacheSize();
     double ramSize = getRamSize();
     double pageSize = getPageSize();
-    double ipc = readIPCValue();
+    double ipc = readIPCValue(1);
 
     double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
 
@@ -874,6 +894,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     std::cout << "cache size: " << cacheSize  << std::endl;
     std::cout << "ram size: " << ramSize  << std::endl;
     std::cout << "page size: " << pageSize  << std::endl;
+    std::cout << "IPC:" <<ipc <<std::endl;
 
     std::cout << "Calculated C Const Value: " << c_const << " ... will be cast to " << static_cast<int>(c_const) << std::endl;
 
