@@ -23,7 +23,7 @@
 #endif
 
 #ifndef COMPUTE_C_CONST
-#define C_CONSTANT (256)
+#define C_CONSTANT (192)
 #endif
 
 
@@ -874,8 +874,8 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
  double ipcToPercentage(double ipc)
   {
     // Define the IPC boundaries and corresponding percentages
-    double x1 = 1.06, y1 = 110; // IPC = 1.06 corresponds to 110%
-    double x2 = 2.07, y2 = 80;  // IPC = 2.07 corresponds to 80%
+    double x1 = 1.06, y1 = 200; // IPC = 1.06 corresponds to 110%
+    double x2 = 1.71, y2 = 50;  // IPC = 2.07 corresponds to 80%
 
     // Calculate the percentage using linear interpolation
     double percentage = y1 + ((ipc - x1) * (y2 - y1) / (x2 - x1));
