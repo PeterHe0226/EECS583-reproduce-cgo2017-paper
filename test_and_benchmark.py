@@ -6,8 +6,12 @@ import argparse
 import pathlib
 from datetime import datetime
 import re
+import shutil
 
 BENCHMARK_OUTPUT_DIR = pathlib.Path("./benchmark_output")
+BENCHMARK_TEMP_OUTPUT_DIR = pathlib.Path("./temp_output")
+
+TEST_REPITITIONS = 3
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -27,23 +31,30 @@ def build_benchmarks():
 
 def generate_output_dir(workdir):
     global timestamp
-    output_dir = BENCHMARK_OUTPUT_DIR / workdir.strip("/").split("/")[-1] / timestamp
+    global args
+
+    out_dir = BENCHMARK_TEMP_OUTPUT_DIR
+    if (args.save):
+        out_dir = BENCHMARK_OUTPUT_DIR
+
+    output_dir = out_dir / workdir.strip("/").split("/")[-1] / timestamp
+
     return output_dir
 
 def run_benchmark(commands, workdir):
     global args
     global timestamp
-    if (args.save):
-        output_dir = generate_output_dir(workdir)
-        output_dir.mkdir(parents=True) 
-        output_dir = output_dir.resolve()
-        
-        output_commands = []
-        for command in commands:
-            executable_name = command[0].split('/')[-1]
-            command.extend(["|", f"tee {output_dir / executable_name}.txt"])
-            output_commands.append(' '.join(command))
-        commands = output_commands
+
+    output_dir = generate_output_dir(workdir)
+    output_dir.mkdir(parents=True) 
+    output_dir = output_dir.resolve()
+    
+    output_commands = []
+    for command in commands:
+        executable_name = command[0].split('/')[-1]
+        command.extend(["|", f"tee {output_dir / executable_name}.txt"])
+        output_commands.append(' '.join(command))
+    commands = output_commands
 
     for command in commands:
         do_cmd(command, workdir)
@@ -53,11 +64,10 @@ def get_files_to_parse(commands, workdir):
     
     files = []
     
-    if args.save:
-        output_dir = generate_output_dir(workdir)
-        for command in commands:
-            file = output_dir / (command[0].split('/')[-1] + ".txt")
-            files.append(file)
+    output_dir = generate_output_dir(workdir)
+    for command in commands:
+        file = output_dir / (command[0].split('/')[-1] + ".txt")
+        files.append(file)
 
     return files
 
@@ -74,7 +84,7 @@ def create_pretty_print_text(benchmark, times):
     return s
 
 def try_parse_results(commands, workdir, regex):
-    ret = ''
+    global args
 
     files = get_files_to_parse(commands, workdir)
     times = []
@@ -84,41 +94,57 @@ def try_parse_results(commands, workdir, regex):
             match = re.search(regex, data)
             if match:
                 times.append(float(match.group(1)))
-    if len(times) > 0:
-        test_name = workdir.split('/')[-1]
-        ret = create_pretty_print_text(test_name, times)
 
-    return ret
+    if not args.save:
+        # delete the temp out director
+        dir = generate_output_dir(workdir)
+        shutil.rmtree(dir)
+
+    return times
+
+def repeat_benchmark(commands, workdir, regex):
+    total_times = [0, 0, 0]
+    test_name = workdir.split('/')[-1]
+    for i in range(TEST_REPITITIONS):
+        print("")
+        print(test_name + " Benchmark Run #" + str(i + 1))
+        print("")
+        run_benchmark(commands, workdir)
+        temp = try_parse_results(commands, workdir, regex)
+        total_times[0] += temp[0]
+        total_times[1] += temp[1]
+        total_times[2] += temp[2]
+
+    total_times[0] /= TEST_REPITITIONS
+    total_times[1] /= TEST_REPITITIONS
+    total_times[2] /= TEST_REPITITIONS
+
+    return create_pretty_print_text(test_name, total_times)
 
 def run_graph500_benchmark():
     #commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
     commands = [["bin/x86/g500-auto"]]
     workdir = "./program/graph500"
-    run_benchmark(commands, workdir)
 
-    return try_parse_results(commands, workdir, r"max_time: (\d+\.\d+e[+-]\d+)")
+    return repeat_benchmark(commands, workdir, r"max_time: (\d+\.\d+e[+-]\d+)")
 
 def run_hj2_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
     workdir = "./program/hashjoin-ph-2"
-    run_benchmark(commands, workdir)
-
-    return try_parse_results(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+    
+    return repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
 
 def run_hj8_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
     workdir = "./program/hashjoin-ph-8"
-    run_benchmark(commands, workdir)
-
-    return try_parse_results(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+    
+    return repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
 
 def run_nas_cg_benchmark():
-    #commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
-    commands = [["bin/x86/cg-auto"]]
+    commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
     workdir = "./program/nas-cg"
-    run_benchmark(commands, workdir)
 
-    return try_parse_results(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
+    return repeat_benchmark(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
 
 def run_randacc_benchmark():
     return ''
