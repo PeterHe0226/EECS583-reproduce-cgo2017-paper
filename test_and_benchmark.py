@@ -119,38 +119,43 @@ def repeat_benchmark(commands, workdir, regex):
     total_times[1] /= TEST_REPITITIONS
     total_times[2] /= TEST_REPITITIONS
 
-    return create_pretty_print_text(test_name, total_times)
+    return create_pretty_print_text(test_name, total_times), total_times
 
 def run_graph500_benchmark():
     commands = [["bin/x86/g500-no"], ["bin/x86/g500-auto"], ["bin/x86/g500-auto-new"]]
     #commands = [["bin/x86/g500-auto"]]
     workdir = "./program/graph500"
 
-    return repeat_benchmark(commands, workdir, r"median_time: (\d+\.\d+e[+-]\d+)")
+    ret, ignore = repeat_benchmark(commands, workdir, r"median_time: (\d+\.\d+e[+-]\d+)")
+    return ret
 
 def run_hj2_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
     workdir = "./program/hashjoin-ph-2"
     
-    return repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+    ret, ignore = repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+    return ret
 
 def run_hj8_benchmark():
     commands = [["src/bin/x86/hj2-no"], ["src/bin/x86/hj2-auto"], ["src/bin/x86/hj2-auto-new"]]
     workdir = "./program/hashjoin-ph-8"
     
-    return repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+    ret, ignore = repeat_benchmark(commands, workdir, r"TOTAL-TIME-USECS, TOTAL-TUPLES, CYCLES-PER-TUPLE:\s+(\d+\.\d+)\s+")
+    return ret
 
 def run_nas_cg_benchmark():
     commands = [["bin/x86/cg-no"], ["bin/x86/cg-auto"], ["bin/x86/cg-auto-new"]]
     workdir = "./program/nas-cg"
 
-    return repeat_benchmark(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
+    ret, ignore = repeat_benchmark(commands, workdir, r"Time in seconds\s*=\s*(\d+\.\d+)")
+    return ret
 
 def run_randacc_benchmark():
     commands = [["bin/x86/randacc-no", "100000000"], ["bin/x86/randacc-auto", "100000000"], ["bin/x86/randacc-auto-new", "100000000"]]
     workdir = "./program/randacc"
     
-    return repeat_benchmark(commands, workdir, r"Time in milliseconds:\s*(\d+\.\d+)")
+    ret, ignore = repeat_benchmark(commands, workdir, r"Time in milliseconds:\s*(\d+\.\d+)")
+    return ret
 
 def rebuild_pass():
     do_cmd(['python3', 'build_pass.py', '-c'], './', False)
