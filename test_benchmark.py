@@ -4,6 +4,7 @@ import csv
 import argparse
 import subprocess
 import pathlib
+import numpy as np
 
 def parser_create():
     parser = argparse.ArgumentParser(description='start c constant value and increment value')
@@ -43,9 +44,9 @@ def run_script_with_inputs(script_name, initial_input, exit_input, start_input):
     process = subprocess.Popen(['python3', script_name], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     stdout, stderr = process.communicate(input= start_input + '\n' + initial_input + '\n' + exit_input + '\n')
-    print("Output after initial input:", stdout)
-    if stderr:
-        print("Error:", stderr)
+    # print("Output after initial input:", stdout)
+    # if stderr:
+    #     print("Error:", stderr)
 
     # # Check if process is still running, if not, no need to send 'e'
     # if process.poll() is None:
@@ -68,7 +69,7 @@ def catch_time_nas_cg(output):
     time_pattern = re.compile(r"Time in seconds =\s+([\d\.]+)")
     times = time_pattern.findall(output)
 
-    # print(times)
+    # print(type(times))
     return times
 
 
@@ -91,24 +92,32 @@ def main():
     
     file_path = pathlib.Path('./freshAttempt/swPrefetchPass/swPrefetchPass.cpp')
 
-    exit_option = 'e'
-    build_option = 'b'
-    test_option = '4'
+    exit_option = 'e' # exit for the program
+    build_option = 'b' # rebuild the pass and all benchmarks
+    test_option = '4' # which test to go, option 4 here is nas-cg
     test_script_name = 'test_and_benchmark.py'
-
+    mutiple_times = 5 # how many time to repeat 
     time_list = []
 
     for _ in range(maximum_to_increment):
-        constant_val = constant_val * increment_val
 
+        average_list = np.array([0, 0, 0], dtype=np.float32)
+        constant_val = constant_val * increment_val
         modify_cpp_constant(file_path, constant_val)
 
-        output = run_script_with_inputs(test_script_name,test_option, exit_option,build_option)
-        if test_option == '4':
-            run_time = [constant_val]
-            run_time.extend(catch_time_nas_cg(output))
-            
-            time_list.append(run_time)
+        for _ in range(mutiple_times):
+            output = run_script_with_inputs(test_script_name,test_option, exit_option,build_option)
+            if test_option == '4':
+                output = catch_time_nas_cg(output)
+            average_list = average_list + np.array(output).astype(float)
+
+
+        average_list = (average_list / mutiple_times).tolist()
+        print(average_list)
+        run_time = [constant_val]
+        run_time.extend(average_list)
+        
+        time_list.append(run_time)
 
     
     write_to_csv(f'test_benchmark_{test_option}.csv',time_list)
