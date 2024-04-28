@@ -193,22 +193,27 @@ def modify_cpp_constant(new_value):
 
 def plot_optimal_c_value_data(file_path):
     with open(file_path, 'r') as file:
-        # Create a CSV reader object
         csv_reader = csv.reader(file)
         headers = next(csv_reader)  # Read the header row
         x_labels = headers[1:]  # Column headers except the first 'test' column
+
+        plt.figure(constrained_layout=True)
         
         for row in csv_reader:
-            test = row[0]  # First column is the label for the graph
-            y_values = list(map(float, row[1:]))  # Remaining columns are data points
+            test = row[0]
+            y_values = list(map(float, row[1:]))
+            # Normalize by dividing by the first data point in the row
+            base_value = y_values[0]
+            normalized_values = [y / base_value for y in y_values]
             
-            plt.figure(constrained_layout=True)
-            plt.plot(x_labels, y_values, marker='o')  # Plotting the line graph
-            plt.title(('Optimal C Constant Value for ' + test + ' benchmark'))
-            plt.xlabel("C Constant Value")
-            plt.ylabel("Time (unitless)")
-            plt.grid(True)
-            plt.savefig(test + '_c_const_value.png')
+            plt.plot(x_labels, normalized_values, marker='o', label=test)
+        
+        plt.title("Optimal C Constant Value for benchmarks")
+        plt.xlabel("C Constant Value")
+        plt.ylabel("Time Relative to Performance for C=32")
+        plt.grid(True)
+        plt.legend()  # Add a legend to identify each line
+        plt.savefig('optimal_c_const_value.png')
 
 def find_optimal_c_value():
     current = 0
