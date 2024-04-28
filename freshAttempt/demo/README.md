@@ -4,4 +4,4 @@ clang -emit-llvm -S demoExample.c -Xclang -disable-O0-optnone -o demoExample.bc
 
 opt -passes=mem2reg demoExample.bc -S -o demoExample.ll
 
-opt -load-pass-plugin=./build/swPrefetchPass/SwPrefetchPass_new.so -passes="func-name" demoExample.ll -S -o demoPostPass.ll
+opt -load-pass-plugin=./../build/swPrefetchPass/SwPrefetchPass_g500.so -passes="func-name" demoExample.ll -S -o demoPostPass.ll
