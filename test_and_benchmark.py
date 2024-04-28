@@ -12,7 +12,7 @@ import csv
 BENCHMARK_OUTPUT_DIR = pathlib.Path("./benchmark_output")
 BENCHMARK_TEMP_OUTPUT_DIR = pathlib.Path("./temp_output")
 
-TEST_REPITITIONS = 3
+TEST_REPITITIONS = 10
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -191,7 +191,7 @@ def modify_cpp_constant(new_value):
             file.write(line)
 
 def find_optimal_c_value():
-    current = 16
+    current = 0
 
     g500 = []
     hj2  = []
@@ -211,23 +211,23 @@ def find_optimal_c_value():
         cg.append(times[3][0])
         rand.append(times[4][0])
 
-        current = current * 2
+        current = current + 32
 
     with open("./optimal_c_value_out.csv", mode='w', newline='') as file:
         writer = csv.writer(file)
 
-        writer.writerow(['test', '16', '32', '64', '128', '256'])
+        writer.writerow(['test', '32', '64', '96','128','160','192','224', '256'])
 
         temp = g500
-        writer.writerow(['g500', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        writer.writerow(['g500', temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]])
         temp = hj2
-        writer.writerow(['hj2', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        writer.writerow(['hj2', temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]])
         temp = hj8
-        writer.writerow(['hj8', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        writer.writerow(['hj8', temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]])
         temp = cg
-        writer.writerow(['cg', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        writer.writerow(['cg', temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]])
         temp = rand
-        writer.writerow(['rand', temp[0], temp[1], temp[2], temp[3], temp[4]])
+        writer.writerow(['rand', temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]])
 
     # restore original value in cpp file, pass, and benchmarks
     modify_cpp_constant(64)
