@@ -2,8 +2,21 @@
 import numpy as np
 import json
 import pathlib
+import sys
 
-datafile = pathlib.Path('./data.json')
+filename = './machine_data/data_a.json'
+
+if (len(sys.argv) > 1):
+    cla = sys.argv[1]
+    if (cla[1] == 'a' or cla[1] == 'b'):
+        if (cla[1] == 'b'):
+            filename = './machine_data/data_b.json'
+else:
+    print("Usage: python3 generate_k_values.py -X")
+    print("X - either 'a' or 'b' based on which server you are on")
+    exit()
+
+datafile = pathlib.Path(filename)
 
 # Load JSON data from file
 with open(datafile, 'r') as file:
