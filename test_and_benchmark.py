@@ -260,7 +260,7 @@ def find_optimal_c_value():
         writer.writerow(['rand', temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]])
 
     # restore original value in cpp file, pass, and benchmarks
-    modify_cpp_constant(64)
+    modify_cpp_constant(256)
     rebuild_pass()
     build_benchmarks()
 
