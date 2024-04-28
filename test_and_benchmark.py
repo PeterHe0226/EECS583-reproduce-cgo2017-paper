@@ -298,6 +298,28 @@ def generate_all_ipc():
     do_cmd(["./generate_ipc.sh"], "./program/nas-cg")
     do_cmd(["./generate_ipc.sh"], "./program/randacc")
 
+def get_computed_c_val(commands, workdir, regex):
+    run_benchmark(commands, workdir)
+    c_val = try_parse_results(commands, workdir, regex)
+
+    test_name = workdir.split('/')[-1]
+
+    s = '\n\nBenchmark ' + test_name + ' computed c value = ' + str(c_val) + '\n\n'
+    return s
+
+def print_computed_c_vals():
+    regex = r"Calculated C Const Value:\s*([0-9]*\.?[0-9]+)"
+
+    s  = '\n*********************************************************'
+    s += get_computed_c_val([["./print_computed_c_val.sh"]], "./program/graph500", regex)
+    s += get_computed_c_val([["./print_computed_c_val.sh"]], "./program/hashjoin-ph-2", regex)
+    s += get_computed_c_val([["./print_computed_c_val.sh"]], "./program/hashjoin-ph-8", regex)
+    s += get_computed_c_val([["./print_computed_c_val.sh"]], "./program/nas-cg", regex)
+    s += get_computed_c_val([["./print_computed_c_val.sh"]], "./program/randacc", regex)
+    s += '*********************************************************\n'
+
+    return s
+
 if __name__ == "__main__":
     global args
     global timestamp
@@ -319,6 +341,7 @@ if __name__ == "__main__":
         print("b - rebuild the pass and all benchmarks")
         print("f - find optimal c value")
         print("i - generate ipc for all benchmarks")
+        print("c - print computed c values for benchmarks")
         print("1 - run graph500  benchmark")
         print("2 - run hashjoin2 benchmark")
         print("3 - run hashjoin8 benchmark")
@@ -347,6 +370,8 @@ if __name__ == "__main__":
                 generate_all_ipc()
             case 'f':
                 find_optimal_c_value()
+            case 'c':
+                results = print_computed_c_vals()
             case '1':
                 results, ignore = run_graph500_benchmark()
             case '2':
