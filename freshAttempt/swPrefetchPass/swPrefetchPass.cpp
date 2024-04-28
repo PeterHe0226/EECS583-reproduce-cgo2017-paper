@@ -884,7 +884,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     double cacheSize = getCacheSize();
     double ramSize = getRamSize();
     double pageSize = getPageSize();
-    double ipc = readIPCValue(5);
+    double ipc = readIPCValue(4);
 
 
     double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
