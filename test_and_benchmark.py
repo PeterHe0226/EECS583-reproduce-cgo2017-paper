@@ -299,10 +299,9 @@ if __name__ == "__main__":
     global args
     global timestamp
     args = parse_args()
-    original_exists = os.path.isfile("./freshAttempt/build/swPrefetchPass/SwPrefetchPass.so")
-    new_exists      = os.path.isfile("./freshAttempt/build/swPrefetchPass/SwPrefetchPass_new.so")
+    libs_exists = os.path.isfile("./freshAttempt/build/swPrefetchPass/SwPrefetchPass.so")
 
-    if not original_exists or not new_exists:
+    if not libs_exists:
         print("!!! Required shared libs not found... building them now !!!")
         time.sleep(1)
         generate_all_ipc()
@@ -338,6 +337,7 @@ if __name__ == "__main__":
             case 't':
                 build_benchmarks()
             case 'b':
+                generate_all_ipc()
                 rebuild_pass()
                 build_benchmarks()
             case 'i':
