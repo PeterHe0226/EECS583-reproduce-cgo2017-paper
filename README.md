@@ -112,6 +112,8 @@ This will run the randacc benchmark 10 times and generate average execution time
 `Prefetch:     XX.XX`  
 `New Prefetch: XX.XX`  
 `*********************************************************`
+### s
+TODO
 ### e
 This option will stop running the input loop and exit from the program.
 
