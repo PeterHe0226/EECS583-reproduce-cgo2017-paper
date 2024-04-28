@@ -875,11 +875,24 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return output;
   }
 
- /*double adjustCconstant(double c, double ipc)
+  double getAverageIPCValue()
   {
-    c = c- 96*(ipc-1.06);
+    double average = 0.0f;
+    int line_number = 0;
+    while(true)
+    {
+      auto temp = readIPCValue(line_number);
+      if (temp.second < 0.0f)
+      {
+        break;
+      }
 
-  }*/
+      average += temp.second;
+      ++line_number;
+    }
+
+    return average / static_cast<double>(line_number);
+  }
 
   int ComputeCConst()
   {
@@ -889,10 +902,11 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     double ramSize = getRamSize();
     double pageSize = getPageSize();
     auto test_ipc = readIPCValue(IPC_INDEX);
+    double average_ipc = getAverageIPCValue();
 
 
     double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
-    c_const = c_const + 32 * (test_ipc.second - 1.48); //1.48 is the average IPC
+    c_const = c_const + 32 * (test_ipc.second - average_ipc);
 
     std::cout << "cpu speed: " << cpuSpeed << std::endl;
     std::cout << "cores: " << cores  << std::endl;
@@ -900,6 +914,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     std::cout << "ram size: " << ramSize  << std::endl;
     std::cout << "page size: " << pageSize  << std::endl;
     std::cout << "IPC:" << test_ipc.second << "\n";
+    std::cout << "Average IPC: " << average_ipc << std::endl;
 
     std::cout << "Calculated C Const Value: " << c_const << " ... will be cast to " << static_cast<int>(c_const) << std::endl;
 
