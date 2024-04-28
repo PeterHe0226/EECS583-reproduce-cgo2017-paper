@@ -261,8 +261,7 @@ def find_optimal_c_value():
 
     # restore original value in cpp file, pass, and benchmarks
     modify_cpp_constant(256)
-    rebuild_pass()
-    build_benchmarks()
+    build_everything()
 
     plot_optimal_c_value_data(out_file)
 
@@ -323,6 +322,11 @@ def print_computed_c_vals():
 
     return s
 
+def build_everything():
+    generate_all_ipc()
+    rebuild_pass()
+    build_benchmarks()
+
 if __name__ == "__main__":
     global args
     global timestamp
@@ -330,20 +334,16 @@ if __name__ == "__main__":
     libs_exists = os.path.isfile("./freshAttempt/build/swPrefetchPass/SwPrefetchPass.so")
 
     if not libs_exists:
-        print("!!! Required shared libs not found... building them now !!!")
+        print("!!! Required libs/binaries not found... building them now !!!")
         time.sleep(1)
-        generate_all_ipc()
-        rebuild_pass()
-
+        build_everything()
+    
     execute = True
     while execute:
         timestamp = datetime.now().strftime("%m-%d-%y_%I:%M%p")
         print("a - run all benchmarks")
-        print("p - rebuild the pass")
-        print("t - build all benchmarks")
         print("b - rebuild the pass and all benchmarks")
         print("f - find optimal c value")
-        print("i - generate ipc for all benchmarks")
         print("c - print computed c values for benchmarks")
         print("1 - run graph500  benchmark")
         print("2 - run hashjoin2 benchmark")
@@ -361,16 +361,8 @@ if __name__ == "__main__":
         match user_in:
             case 'a':
                 results, ignore = run_all_benchmarks()
-            case 'p':
-                rebuild_pass()
-            case 't':
-                build_benchmarks()
             case 'b':
-                generate_all_ipc()
-                rebuild_pass()
-                build_benchmarks()
-            case 'i':
-                generate_all_ipc()
+                build_everything()
             case 'f':
                 find_optimal_c_value()
             case 'c':
