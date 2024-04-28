@@ -199,7 +199,7 @@ def find_optimal_c_value():
     cg   = []
     rand = []
 
-    for i in range(5): 
+    for i in range(8): 
         modify_cpp_constant(current)
         rebuild_pass()
         build_benchmarks()
