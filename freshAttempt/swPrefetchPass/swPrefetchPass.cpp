@@ -888,7 +888,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
 
     double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
-    c_const = c_const + 32 * (ipc - 1.718); //1.48 is the average IPC
+    c_const = c_const + 32 * (ipc - 1.48); //1.48 is the average IPC
 
     std::cout << "cpu speed: " << cpuSpeed << std::endl;
     std::cout << "cores: " << cores  << std::endl;
