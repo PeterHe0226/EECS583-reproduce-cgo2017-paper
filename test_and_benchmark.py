@@ -267,7 +267,10 @@ def find_optimal_c_value():
     plot_optimal_c_value_data(out_file)
 
 def rebuild_pass():
-    do_cmd(['python3', 'build_pass.py', '-c'], './', False)
+    do_cmd(['rm', '-rf', 'build'], "./freshAttempt", False)
+    do_cmd(['mkdir', 'build'], "./freshAttempt", False)
+    do_cmd(['cmake', '..'], "./freshAttempt/build", False)
+    do_cmd(['make'], "./freshAttempt/build", False)
 
 def run_all_benchmarks(run_only_standard_prefetch = False):
     results = ''
