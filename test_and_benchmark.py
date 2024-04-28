@@ -47,16 +47,19 @@ def run_benchmark(commands, workdir):
     global args
     global timestamp
 
-    output_dir = generate_output_dir(workdir)
-    output_dir.mkdir(parents=True) 
-    output_dir = output_dir.resolve()
-    
-    output_commands = []
-    for command in commands:
-        executable_name = command[0].split('/')[-1]
-        command.extend(["|", f"tee {output_dir / executable_name}.txt"])
-        output_commands.append(' '.join(command))
-    commands = output_commands
+    try:
+        output_dir = generate_output_dir(workdir)
+        output_dir.mkdir(parents=True) 
+        output_dir = output_dir.resolve()
+        
+        output_commands = []
+        for command in commands:
+            executable_name = command[0].split('/')[-1]
+            command.extend(["|", f"tee {output_dir / executable_name}.txt"])
+            output_commands.append(' '.join(command))
+        commands = output_commands
+    except:
+        pass
 
     for command in commands:
         do_cmd(command, workdir)
