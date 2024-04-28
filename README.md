@@ -68,15 +68,50 @@ This option will print out what dynamically computed C constant each benchmark i
 `*********************************************************`
 
 ### 1
-TODO
+This will run the graph500 benchmark 10 times and generate average execution time for binaries which don't use prefetching, use the original authors' prefetching, and our prefetching with dynamic c constant calculation. The average-related output for this test will look like below (XX.XX is a floating point number):  
+  
+`*********************************************************`  
+`Benchmark:    graph500`  
+`Normal:       XX.XX`  
+`Prefetch:     XX.XX`  
+`New Prefetch: XX.XX`  
+`*********************************************************`
 ### 2
-TODO
+This will run the hashjoin2 benchmark 10 times and generate average execution time for binaries which don't use prefetching, use the original authors' prefetching, and our prefetching with dynamic c constant calculation. The average-related output for this test will look like below (XX.XX is a floating point number):  
+  
+`*********************************************************`  
+`Benchmark:    hashjoin-ph-2`  
+`Normal:       XX.XX`  
+`Prefetch:     XX.XX`  
+`New Prefetch: XX.XX`  
+`*********************************************************`
 ### 3
-TODO
+This will run the hashjoin8 benchmark 10 times and generate average execution time for binaries which don't use prefetching, use the original authors' prefetching, and our prefetching with dynamic c constant calculation. The average-related output for this test will look like below (XX.XX is a floating point number):  
+  
+`*********************************************************`  
+`Benchmark:    hashjoin-ph-8`  
+`Normal:       XX.XX`  
+`Prefetch:     XX.XX`  
+`New Prefetch: XX.XX`  
+`*********************************************************`
 ### 4
-TODO
+This will run the nas-cg benchmark 10 times and generate average execution time for binaries which don't use prefetching, use the original authors' prefetching, and our prefetching with dynamic c constant calculation. The average-related output for this test will look like below (XX.XX is a floating point number):  
+  
+`*********************************************************`  
+`Benchmark:    nas-cg`  
+`Normal:       XX.XX`  
+`Prefetch:     XX.XX`  
+`New Prefetch: XX.XX`  
+`*********************************************************`
 ### 5
-TODO
+This will run the randacc benchmark 10 times and generate average execution time for binaries which don't use prefetching, use the original authors' prefetching, and our prefetching with dynamic c constant calculation. The average-related output for this test will look like below (XX.XX is a floating point number):  
+  
+`*********************************************************`  
+`Benchmark:    randacc`  
+`Normal:       XX.XX`  
+`Prefetch:     XX.XX`  
+`New Prefetch: XX.XX`  
+`*********************************************************`
 ### e
 This option will stop running the input loop and exit from the program.
 
