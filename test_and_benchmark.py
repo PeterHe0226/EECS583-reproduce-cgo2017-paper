@@ -8,6 +8,7 @@ from datetime import datetime
 import re
 import shutil
 import csv
+import matplotlib.pyplot as plt
 
 BENCHMARK_OUTPUT_DIR = pathlib.Path("./benchmark_output")
 BENCHMARK_TEMP_OUTPUT_DIR = pathlib.Path("./temp_output")
@@ -190,6 +191,25 @@ def modify_cpp_constant(new_value):
                 line = f'#define C_CONSTANT ({new_value})\n'
             file.write(line)
 
+def plot_optimal_c_value_data(file_path):
+    with open(file_path, 'r') as file:
+        # Create a CSV reader object
+        csv_reader = csv.reader(file)
+        headers = next(csv_reader)  # Read the header row
+        x_labels = headers[1:]  # Column headers except the first 'test' column
+        
+        for row in csv_reader:
+            test = row[0]  # First column is the label for the graph
+            y_values = list(map(float, row[1:]))  # Remaining columns are data points
+            
+            plt.figure(constrained_layout=True)
+            plt.plot(x_labels, y_values, marker='o')  # Plotting the line graph
+            plt.title(('Optimal C Constant Value for ' + test + ' benchmark'))
+            plt.xlabel("C Constant Value")
+            plt.ylabel("Time (unitless)")
+            plt.grid(True)
+            plt.savefig(test + '_c_const_value.png')
+
 def find_optimal_c_value():
     current = 0
 
@@ -213,7 +233,9 @@ def find_optimal_c_value():
 
         current = current + 32
 
-    with open("./optimal_c_value_out.csv", mode='w', newline='') as file:
+    out_file = "./optimal_c_value_out.csv"
+
+    with open(out_file, mode='w', newline='') as file:
         writer = csv.writer(file)
 
         writer.writerow(['test', '32', '64', '96','128','160','192','224', '256'])
@@ -234,6 +256,7 @@ def find_optimal_c_value():
     rebuild_pass()
     build_benchmarks()
 
+    plot_optimal_c_value_data(out_file)
 
 def rebuild_pass():
     do_cmd(['python3', 'build_pass.py', '-c'], './', False)
