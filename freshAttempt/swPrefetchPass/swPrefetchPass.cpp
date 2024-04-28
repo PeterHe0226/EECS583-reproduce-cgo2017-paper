@@ -13,6 +13,7 @@
 #include <limits>
 #include <sstream>
 #include <string>
+#include <utility>
 
 // To use LLVM_DEBUG
 #define DEBUG_TYPE "SwPrefetchPass"
@@ -25,7 +26,6 @@
 #ifndef COMPUTE_C_CONST
 #define C_CONSTANT (128)
 #endif
-
 
 namespace {
 
@@ -839,8 +839,10 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     return getInfoFromSysFile("/proc/meminfo", "Hugepagesize:");
   }
 
-  double readIPCValue(int lineIndex)
+  std::pair<std::string, double> readIPCValue(int lineIndex)
   {
+    std::pair<std::string, double> output("", -1.0f);
+
     std::ifstream file("../../values.txt"); // Open the file
     double ipcValue = 0.0;                  // Variable to store the IPC value
     int currentLine = 0;                    // Current line number
@@ -848,7 +850,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     if (!file.is_open())
     {
       std::cerr << "Unable to open file" << std::endl;
-      return -1; // Return -1 or another error code to indicate failure
+      return output;
     }
 
     std::string line;
@@ -856,11 +858,13 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     {
       if (currentLine == lineIndex) // Check if the current line is the desired line
       {
-        // Convert line to double
+        std::istringstream iss(line);
         
-          ipcValue = std::stod(line);
+        std::getline(iss, output.first, ':');
+        iss >> output.second;
+        
           file.close();
-          return ipcValue;
+          return output;
         
       }
       currentLine++; // Increment line counter
@@ -868,7 +872,7 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
 
     file.close(); // Make sure to close the file if the desired line is not found
     std::cerr << "Line index out of range" << std::endl;
-    return -1; // Return -1 if line index is out of range
+    return output;
   }
 
  /*double adjustCconstant(double c, double ipc)
@@ -884,18 +888,18 @@ struct SwPrefetchPass : public llvm::PassInfoMixin<SwPrefetchPass> {
     double cacheSize = getCacheSize();
     double ramSize = getRamSize();
     double pageSize = getPageSize();
-    double ipc = readIPCValue(1);
+    auto test_ipc = readIPCValue(IPC_INDEX);
 
 
     double c_const = K_VALUES[0] * cpuSpeed + K_VALUES[1] * cores + K_VALUES[2] * cacheSize + K_VALUES[3] * ramSize + K_VALUES[4] * pageSize;
-    c_const = c_const + 32 * (ipc - 1.48); //1.48 is the average IPC
+    c_const = c_const + 32 * (test_ipc.second - 1.48); //1.48 is the average IPC
 
     std::cout << "cpu speed: " << cpuSpeed << std::endl;
     std::cout << "cores: " << cores  << std::endl;
     std::cout << "cache size: " << cacheSize  << std::endl;
     std::cout << "ram size: " << ramSize  << std::endl;
     std::cout << "page size: " << pageSize  << std::endl;
-    std::cout << "IPC:" <<ipc <<std::endl;
+    std::cout << "IPC:" << test_ipc.second << "\n";
 
     std::cout << "Calculated C Const Value: " << c_const << " ... will be cast to " << static_cast<int>(c_const) << std::endl;
 
