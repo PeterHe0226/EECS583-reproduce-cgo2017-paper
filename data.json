@@ -6,7 +6,7 @@
         "cache_size": 8192,
         "ram_size": 65620296,
         "page_size": 2048,
-        "optimal_c_value": 128
+        "optimal_c_value": 64
     },
     {
         "machine": "eecs583b",
@@ -15,7 +15,7 @@
         "cache_size": 8192,
         "ram_size": 65620296,
         "page_size": 2048,
-        "optimal_c_value": 128
+        "optimal_c_value": 64
     },
     {
         "machine": "haswell",
