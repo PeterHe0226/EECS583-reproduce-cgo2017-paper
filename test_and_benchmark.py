@@ -286,6 +286,15 @@ def run_all_benchmarks(run_only_standard_prefetch = False):
     times.append(t)
     return results, times
 
+def generate_all_ipc():
+    if os.path.exists("values.txt"):
+        os.remove("values.txt")
+    do_cmd(["./generate_ipc.sh"], "./program/graph500")
+    do_cmd(["./generate_ipc.sh"], "./program/hashjoin-ph-2")
+    do_cmd(["./generate_ipc.sh"], "./program/hashjoin-ph-8")
+    do_cmd(["./generate_ipc.sh"], "./program/nas-cg")
+    do_cmd(["./generate_ipc.sh"], "./program/randacc")
+
 if __name__ == "__main__":
     global args
     global timestamp
@@ -296,6 +305,7 @@ if __name__ == "__main__":
     if not original_exists or not new_exists:
         print("!!! Required shared libs not found... building them now !!!")
         time.sleep(1)
+        generate_all_ipc()
         rebuild_pass()
 
     execute = True
@@ -306,6 +316,7 @@ if __name__ == "__main__":
         print("t - build all benchmarks")
         print("b - rebuild the pass and all benchmarks")
         print("f - find optimal c value")
+        print("i - generate ipc for all benchmarks")
         print("1 - run graph500  benchmark")
         print("2 - run hashjoin2 benchmark")
         print("3 - run hashjoin8 benchmark")
@@ -329,6 +340,8 @@ if __name__ == "__main__":
             case 'b':
                 rebuild_pass()
                 build_benchmarks()
+            case 'i':
+                generate_all_ipc()
             case 'f':
                 find_optimal_c_value()
             case '1':
