@@ -1,3 +1,8 @@
+# This is the original README from the original authors
+Reference this for more details of the original setup.  
+  
+This folder also contains all original copyright/license/etc files
+
 Artefact Evaluation Reproduction for "Software Prefetching for Indirect Memory Accesses", CGO 2017, using CK. 
 ==================================================
 
