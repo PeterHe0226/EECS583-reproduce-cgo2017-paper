@@ -2,7 +2,7 @@
 This folder houses our implementation of the original prefetch pass in llvm 17 with improvements to code quality (tabs/spaces, readability, c++ best practices, etc.). Furthermore, there is a demo folder which contains a small example to see that our implementation works and inserts prefetches.
 
 # Requirements
-Building the pass requires that the ipc estimate file has been generated. We recommend using the top level python script to handle this for you. However, if you would like to build manually, pleas follow instruction under program/ on how to generate the ipc estimate file, and then use cmake to build.
+Building the pass requires that the ipc estimate file has been generated. We recommend using the top level python script to handle this for you. However, if you would like to build manually, please follow instruction under /program on how to generate the ipc estimate file, and then use cmake to build.
 
 # Build System
 We use a standard cmake build system to generate shared libs of our llvm pass, however, we define multiple targets so that we have a specific shared lib for each of the benchmarks used. 
