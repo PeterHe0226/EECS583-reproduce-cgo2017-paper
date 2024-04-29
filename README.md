@@ -54,7 +54,9 @@ It is currently configured to start with C=32 and go up to C=256 incrementing by
 
 Each iteration will automatically change the hard coded value in `freshAttempt/swPrefetchPass/swPrefetchPass.cpp`, rebuild pass/benchmarks, and run all benchmarks only on the binary compiled against the hard coded C const. Like the run all benchmarks option, on each iteration, it will run each benchmark 10 times and compute average execution time.  
 
-At the end of all iterations it will populate a csv where each row is the average time for a specific benchmark for each hard coded C value that was tested. An example of this output is under program `optimal_c_value/machine_X/optimal_c_value_out.csv`. Furthermore, it will also generate a graph like this: `optimal_c_value/machine_X/machine_a_c_const_value.png`.
+At the end of all iterations it will populate a csv where each row is the average time for a specific benchmark for each hard coded C value that was tested. An example of this output is under program `optimal_c_value/machine_X/optimal_c_value_out.csv`. Furthermore, it will also generate a graph like this: `optimal_c_value/machine_X/machine_a_c_const_value.png`.  
+
+**Note:** this takes over an hour to complete.
 ### c
 This option will print out what dynamically computed C constant each benchmark is running with. The output will match the following (XX.XXX is a 3 decimal place floating point number):  
   
