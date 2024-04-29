@@ -1,5 +1,5 @@
 # Overview
-This repo houses all code and scripts written by Group 17 for EECS 583 Winter 2023. This readme has information pertaining to the python scripts at the root folder, and how to get started with testing/benchmarking. Open subfolders to find readmes with more context-specific information. Below are links to all the other readmes:  
+This repo houses all code and scripts written by Group 17 for EECS 583 Winter 2024. This readme has information pertaining to the python scripts at the root folder, and how to get started with testing/benchmarking. Open subfolders to find readmes with more context-specific information. Below are links to all the other readmes:  
 
 - [Prefetch LLVM 17 Pass](freshAttempt/README.md)  
 - [Simple Demo](freshAttempt/demo/README.md)  
