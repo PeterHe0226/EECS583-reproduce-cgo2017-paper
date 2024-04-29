@@ -8,7 +8,9 @@ This repo houses all code and scripts written by Group 17 for EECS 583 Winter 20
 - [Machine HW Information](machine_data/README.md)  
 - [Legal Information](legal/README.md)  
 
-**Note:** The Getting Started is at the bottom since it is expected that the user goes through the background section to understand how to use the scripts
+**Note:** The Getting Started is at the bottom since it is expected that the user goes through the background section to understand how to use the scripts  
+  
+**DISCLAIMER:** We only tested our scripts/implementation on the 2 eecs583 servers made available to us, so we only guarantee that it all works on those 2 servers!!!
 # Background
 This section will go over the purpose of both python scripts and how to use them.  
 
